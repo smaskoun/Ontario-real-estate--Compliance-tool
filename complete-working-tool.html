@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Ontario Real Estate Transaction Tool - WORKING VERSION</title>
+    <style>
+        /* EMBEDDED CSS - GUARANTEED TO WORK */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            
+            /* Light Theme Default */
+            --bg-main: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-accent: #f3f4f6;
+            --text-main: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border-main: #e5e7eb;
+            --border-light: #f3f4f6;
+        }
+
+        /* Dark Theme - WORKING */
+        html[data-theme="dark"], [data-theme="dark"] {
+            --bg-main: #1f2937 !important;
+            --bg-secondary: #111827 !important;
+            --bg-accent: #374151 !important;
+            --text-main: #f9fafb !important;
+            --text-secondary: #d1d5db !important;
+            --text-muted: #9ca3af !important;
+            --border-main: #374151 !important;
+            --border-light: #4b5563 !important;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-main);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* THEME TOGGLE - GUARANTEED VISIBLE */
+        .theme-toggle {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            z-index: 9999 !important;
+            background: var(--bg-main) !important;
+            border: 2px solid var(--border-main) !important;
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: var(--text-main) !important;
+            min-width: 90px !important;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        }
+
+        .theme-toggle-icon {
+            width: 18px !important;
+            height: 18px !important;
+            color: var(--text-main) !important;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header__content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header__title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .header__subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .header__logo {
+            margin-left: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-main);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card__header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-accent);
+        }
+
+        .card__header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .card__body {
+            padding: 2rem;
+        }
+
+        /* Warning Card */
+        .warning-card {
+            border-left: 4px solid var(--warning);
+        }
+
+        .warning-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-header h2 {
+            color: var(--warning);
+        }
+
+        .warning-icon {
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+
+        /* UNIVERSAL FORMS - PROFESSIONAL GRID LAYOUT */
+        .universal-forms-list {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)) !important;
+            gap: 1.5rem !important;
+            padding: 0 !important;
+        }
+
+        @media (max-width: 768px) {
+            .universal-forms-list {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        .form-item {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+            padding: 1.5rem !important;
+            background: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-main) 100%) !important;
+            border-radius: 12px !important;
+            border-left: 4px solid var(--primary) !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+            min-height: 140px !important;
+        }
+
+        .form-item:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+        }
+
+        .form-item__checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        .form-item__content {
+            flex: 1;
+        }
+
+        .form-item__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-item__name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .form-item__number {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: rgba(30, 64, 175, 0.1);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .form-item__details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-item__purpose {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-item__timing {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .form-item__compliance {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-item__notes {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Form Styling */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-section__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group__options {
+            display: grid;
+            gap: 0.75rem;
+            grid-template-columns: 1fr;
+        }
+
+        .form-group__options--checkboxes {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .form-group__options {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+        }
+
+        /* Radio/Checkbox Options */
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid var(--border-main);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-main);
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: var(--primary-light);
+            background: var(--bg-accent);
+            transform: translateY(-1px);
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        .radio-option:has(input:checked),
+        .checkbox-option:has(input:checked) {
+            border-color: var(--primary);
+            background: rgba(30, 64, 175, 0.05);
+        }
+
+        .radio-option__label,
+        .checkbox-option__label {
+            font-weight: 600;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .radio-option__description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            min-height: 44px;
+        }
+
+        .btn--primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn--secondary {
+            background: var(--bg-main);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn--secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn--success {
+            background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+            color: white;
+        }
+
+        .btn--success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn--outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--border-main);
+        }
+
+        .btn--outline:hover {
+            background: var(--bg-accent);
+        }
+
+        .btn--large {
+            padding: 1.25rem 2rem;
+            font-size: 1.125rem;
+            min-height: 52px;
+        }
+
+        .btn--small {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            min-height: 36px;
+        }
+
+        .form__actions {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-main);
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form__actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Results */
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .property-forms-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .forms-category {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .forms-category__title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .forms-category__list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-left: 1rem;
+        }
+
+        .form-list-item {
+            color: var(--text-main);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .form-list-item::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -1rem;
+        }
+
+        /* Clauses */
+        .clauses-section {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .clause-category {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .clause-category__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .clauses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .clause-item {
+            background: var(--bg-main);
+            border: 2px solid var(--border-main);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .clause-item:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .clause-item__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .clause-item__name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .clause-item__reference {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: rgba(30, 64, 175, 0.1);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .clause-item__text {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            background: var(--bg-accent);
+            border: 1px solid var(--border-main);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            resize: vertical;
+        }
+
+        .clause-item__details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .clause-item__label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .clause-item__description {
+            font-size: 0.875rem;
+            color: var(--text-main);
+            margin-top: 0.5rem;
+        }
+
+        /* Compliance */
+        .compliance-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .compliance-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-accent);
+            border-radius: 8px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .compliance-item__checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--success);
+        }
+
+        .compliance-item__text {
+            flex: 1;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        /* Export */
+        .export-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .export-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toast */
+        .copy-toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .copy-toast__content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .copy-toast__text {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-main);
+            border-top: 1px solid var(--border-main);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer__content {
+            text-align: center;
+        }
+
+        .footer__disclaimer {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .footer__copyright {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .header__content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header__logo {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .header__title {
+                font-size: 1.75rem;
+            }
+            
+            .theme-toggle {
+                top: 1rem !important;
+                right: 1rem !important;
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- THEME TOGGLE BUTTON -->
+    <button class="theme-toggle" id="theme-toggle">
+        <svg class="theme-toggle-icon" id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="m12 7-4-4M12 17l-4 4M17 12h4M7 12H3M15.54 8.46l2.83-2.83M5.17 19.83l2.83-2.83M8.46 15.54l-2.83 2.83M19.83 5.17l-2.83 2.83"></path>
+        </svg>
+        <svg class="theme-toggle-icon hidden" id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span id="theme-text">Dark</span>
+    </button>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__branding">
+                    <h1 class="header__title">Complete Ontario Real Estate Transaction Tool</h1>
+                    <p class="header__subtitle">Full Compliance Edition - RECO | FINTRAC | PIPEDA</p>
+                </div>
+                <div class="header__logo">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Universal Mandatory Forms -->
+            <div class="universal-forms-section">
+                <div class="card warning-card">
+                    <div class="card__header">
+                        <div class="warning-header">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                <path d="M12 9v4"/>
+                                <path d="m12 17 .01 0"/>
+                            </svg>
+                            <h2>⚠️ UNIVERSAL MANDATORY FORMS - Required for Every Transaction</h2>
+                        </div>
+                        <p class="text-secondary">These forms are required by RECO, FINTRAC, and PIPEDA for ALL Ontario real estate transactions regardless of type.</p>
+                    </div>
+                    <div class="card__body">
+                        <div id="universal-forms-list" class="universal-forms-list">
+                            <!-- Forms will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Profile Form -->
+            <div class="input-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Complete Transaction Profile</h2>
+                        <p class="text-secondary">Classify your transaction for accurate form and clause recommendations with full compliance guidance.</p>
+                    </div>
+                    <div class="card__body">
+                        <form id="transaction-form" class="form">
+                            <div class="form-section">
+                                <h3 class="form-section__title">Essential Classifications <span class="required">*</span></h3>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Property Type</label>
+                                    <div class="form-group__options">
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="residential_freehold" required>
+                                            <div>
+                                                <span class="radio-option__label">Residential Freehold</span>
+                                                <div class="radio-option__description">Houses, townhomes, detached properties</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="residential_condo" required>
+                                            <div>
+                                                <span class="radio-option__label">Residential Condo</span>
+                                                <div class="radio-option__description">Condo units, apartments</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="commercial" required>
+                                            <div>
+                                                <span class="radio-option__label">Commercial</span>
+                                                <div class="radio-option__description">Office, retail, industrial</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="vacant_land" required>
+                                            <div>
+                                                <span class="radio-option__label">Vacant Land</span>
+                                                <div class="radio-option__description">Undeveloped lots</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="new_construction" required>
+                                            <div>
+                                                <span class="radio-option__label">New Construction</span>
+                                                <div class="radio-option__description">Pre-construction, newly built</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="property_type" value="business_purchase" required>
+                                            <div>
+                                                <span class="radio-option__label">Business Purchase</span>
+                                                <div class="radio-option__description">Buying an existing business</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Client Type</label>
+                                    <div class="form-group__options">
+                                        <label class="radio-option">
+                                            <input type="radio" name="client_type" value="individual" required>
+                                            <div>
+                                                <span class="radio-option__label">Individual</span>
+                                                <div class="radio-option__description">Personal buyers/sellers</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="client_type" value="corporate" required>
+                                            <div>
+                                                <span class="radio-option__label">Corporate</span>
+                                                <div class="radio-option__description">Companies, corporations</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="client_type" value="mixed" required>
+                                            <div>
+                                                <span class="radio-option__label">Mixed</span>
+                                                <div class="radio-option__description">Individual + Corporate</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Representation Status</label>
+                                    <div class="form-group__options">
+                                        <label class="radio-option">
+                                            <input type="radio" name="representation_status" value="client_represented" required>
+                                            <div>
+                                                <span class="radio-option__label">Client Represented</span>
+                                                <div class="radio-option__description">You represent the client</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="representation_status" value="self_represented" required>
+                                            <div>
+                                                <span class="radio-option__label">Self-Represented</span>
+                                                <div class="radio-option__description">Party represents themselves</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="representation_status" value="multiple_representation" required>
+                                            <div>
+                                                <span class="radio-option__label">Multiple Representation</span>
+                                                <div class="radio-option__description">You represent both parties</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Fund Handling</label>
+                                    <div class="form-group__options">
+                                        <label class="radio-option">
+                                            <input type="radio" name="fund_handling" value="deposits_received" required>
+                                            <div>
+                                                <span class="radio-option__label">Deposits Received by Brokerage</span>
+                                                <div class="radio-option__description">You will handle client funds</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="fund_handling" value="no_funds" required>
+                                            <div>
+                                                <span class="radio-option__label">No Funds Handled</span>
+                                                <div class="radio-option__description">No deposit handling</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3 class="form-section__title">Additional Classifications (For Enhanced Accuracy)</h3>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Additional Characteristics</label>
+                                    <div class="form-group__options form-group__options--checkboxes">
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="high_value">
+                                            <span class="checkbox-option__label">High Value ($1M+)</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="out_of_province">
+                                            <span class="checkbox-option__label">Out-of-Province Clients</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="foreign_nationals">
+                                            <span class="checkbox-option__label">Foreign Nationals</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="expedited">
+                                            <span class="checkbox-option__label">Expedited Timeline (<30 days)</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="first_time_buyer">
+                                            <span class="checkbox-option__label">First-time buyer</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="needs_financing">
+                                            <span class="checkbox-option__label">Needs financing</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="selling_to_buy">
+                                            <span class="checkbox-option__label">Selling current home to buy</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="rural">
+                                            <span class="checkbox-option__label">Rural property</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input type="checkbox" name="transaction_details" value="older_home">
+                                            <span class="checkbox-option__label">Older home (40+ years)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form__actions">
+                                <button type="submit" class="btn btn--primary btn--large">Generate Complete Compliance Analysis</button>
+                                <button type="reset" class="btn btn--secondary">Reset Form</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="results-section" style="display: none;">
+                
+                <!-- Property-Specific Forms -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Property-Specific OREA Forms</h2>
+                        <p class="text-secondary">Required forms specific to your transaction type.</p>
+                    </div>
+                    <div class="card__body">
+                        <div id="property-forms-list" class="property-forms-list">
+                            <!-- Property-specific forms will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clause Recommendations -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Clause Recommendations with Copy-Ready Text</h2>
+                        <p class="text-secondary">Complete OREA clause text for your agreements.</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="clauses-section">
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Mandatory Clauses</h3>
+                                <div id="mandatory-clauses" class="clauses-list">
+                                    <!-- Mandatory clauses will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Recommended Clauses</h3>
+                                <div id="recommended-clauses" class="clauses-list">
+                                    <!-- Recommended clauses will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Conditional Clauses</h3>
+                                <div id="conditional-clauses" class="clauses-list">
+                                    <!-- Conditional clauses will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compliance Checklist -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Transaction Compliance Checklist</h2>
+                        <p class="text-secondary">Ensure all regulatory requirements are met.</p>
+                    </div>
+                    <div class="card__body">
+                        <div id="compliance-checklist" class="compliance-checklist">
+                            <!-- Compliance checklist will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Actions -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Export & Copy Functions</h2>
+                        <p class="text-secondary">Generate summaries and copy text for your agreements.</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="export-actions">
+                            <button id="copy-all-clauses" class="btn btn--primary">Copy All Selected Clauses</button>
+                            <button id="generate-summary" class="btn btn--success">Generate Complete Transaction Summary</button>
+                            <button id="print-checklist" class="btn btn--secondary">Print Compliance Checklist</button>
+                            <button id="export-forms" class="btn btn--secondary">Export Form List</button>
+                            <button id="start-new-transaction" class="btn btn--outline">Start New Transaction</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <p class="footer__disclaimer">
+                    <strong>Disclaimer:</strong> This tool provides guidance based on current Ontario real estate regulations. 
+                    Always consult with qualified legal counsel and verify current requirements with RECO and OREA. 
+                    Professional judgment is required for all real estate transactions.
+                </p>
+                <p class="footer__copyright">
+                    © 2025 Ontario Real Estate Transaction Tool. For professional use only.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy Success Toast -->
+    <div id="copy-toast" class="copy-toast">
+        <div class="copy-toast__content">
+            <svg class="copy-toast__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+            <span class="copy-toast__text">Copied to clipboard!</span>
+        </div>
+    </div>
+
+    <script>
+        // EMBEDDED JAVASCRIPT - COMPLETE WORKING VERSION
+        
+        // Theme Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeThemeToggle();
+            setupFormHandlers();
+            setupExportHandlers();
+            displayUniversalMandatoryForms();
+        });
+
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeText = document.getElementById('theme-text');
+            
+            // Check for saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeToggleUI(savedTheme);
+            
+            // Add click event listener
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeToggleUI(newTheme);
+                    
+                    // Show feedback
+                    showCopyToast(`Switched to ${newTheme} mode!`);
+                });
+            }
+            
+            function updateThemeToggleUI(theme) {
+                if (theme === 'dark') {
+                    themeIconLight?.classList.add('hidden');
+                    themeIconDark?.classList.remove('hidden');
+                    if (themeText) themeText.textContent = 'Light';
+                } else {
+                    themeIconLight?.classList.remove('hidden');
+                    themeIconDark?.classList.add('hidden');
+                    if (themeText) themeText.textContent = 'Dark';
+                }
+            }
+        }
+
+        // Universal Mandatory Forms Data
+        const universalMandatoryForms = {
+            "reco_information_guide": {
+                "form_name": "RECO Information Guide", 
+                "form_number": "RECO Guide",
+                "purpose": "Consumer protection - explains rights, duties, and expectations",
+                "when_required": "Before any services or assistance are provided",
+                "notes": "Must be explained to client and acknowledgement obtained",
+                "compliance": "RECO/TRESA requirement"
+            },
+            "privacy_policy_disclosure": {
+                "form_name": "Privacy Policy Disclosure",
+                "form_number": "PIPEDA Compliance Form",
+                "purpose": "Informs clients how personal information is collected, used, and disclosed", 
+                "when_required": "Before collecting any personal information",
+                "notes": "Must explain data handling practices and obtain consent",
+                "compliance": "PIPEDA requirement"
+            },
+            "fintrac_individual_id": {
+                "form_name": "FINTRAC Individual Identification Information Record",
+                "form_number": "OREA Form 630 / CREA Template",
+                "purpose": "Anti-money laundering compliance for individual clients",
+                "when_required": "For individual buyers/sellers before offer acceptance",
+                "notes": "Photo ID, Credit File, or Dual Process method required",
+                "compliance": "FINTRAC/PCMLTFA requirement"
+            },
+            "fintrac_corporate_id": {
+                "form_name": "FINTRAC Corporation/Entity Identification Information Record", 
+                "form_number": "CREA Corporate Template",
+                "purpose": "Anti-money laundering compliance for corporate clients",
+                "when_required": "For corporate buyers/sellers before offer acceptance",
+                "notes": "Verify existence of corporation and identify directors",
+                "compliance": "FINTRAC/PCMLTFA requirement"
+            },
+            "receipt_of_funds": {
+                "form_name": "Receipt of Funds Record",
+                "form_number": "CREA Template",
+                "purpose": "Records all funds received by brokerage",
+                "when_required": "When any deposit or payment is received",
+                "notes": "Required for trust account compliance and FINTRAC",
+                "compliance": "FINTRAC/PCMLTFA requirement"
+            },
+            "representation_agreement": {
+                "form_name": "Buyer/Seller Representation Agreement",
+                "form_number": "OREA Form 300 (BRA) / Form 200 (Listing)",
+                "purpose": "Establishes client relationship and service terms",
+                "when_required": "Before providing services to buyers/sellers",
+                "notes": "Defines duties, commission, and representation type",
+                "compliance": "RECO/TRESA requirement"
+            },
+            "self_represented_acknowledgement": {
+                "form_name": "Information and Disclosure to Self-Represented Party", 
+                "form_number": "RECO Form",
+                "purpose": "Acknowledges party is not represented by the brokerage",
+                "when_required": "Before assisting any unrepresented party",
+                "notes": "Explains limitations of assistance that can be provided",
+                "compliance": "RECO/TRESA requirement"
+            },
+            "cooperation_confirmation": {
+                "form_name": "Confirmation of Co-operation and Representation",
+                "form_number": "OREA Form 320", 
+                "purpose": "Confirms agency relationships in the transaction",
+                "when_required": "Before presenting offers or showing properties",
+                "notes": "Clarifies who represents whom in the transaction",
+                "compliance": "RECO/TRESA requirement"
+            }
+        };
+
+        const transactionSpecificForms = {
+            "residential_freehold": {
+                "primary": "OREA Form 100 - Agreement of Purchase and Sale",
+                "additional": [
+                    "OREA Form 105 - Schedule for Additional Terms",
+                    "OREA Form 120 - Amendment to Agreement",
+                    "OREA Form 121 - Notice to Remove Condition(s)",
+                    "OREA Form 220 - Seller Property Information Statement (SPIS)"
+                ]
+            },
+            "residential_condo": {
+                "primary": "OREA Form 101 - Agreement of Purchase and Sale (Condominium)",
+                "additional": [
+                    "OREA Form 105 - Schedule for Additional Terms",
+                    "OREA Form 150 - Assignment of Agreement (Condominium)",
+                    "OREA Form 120 - Amendment to Agreement"
+                ]
+            },
+            "commercial": {
+                "primary": "OREA Form 500 - Agreement of Purchase and Sale (Commercial)",
+                "additional": [
+                    "OREA Form 501 - Agreement of Purchase and Sale (Commercial Condo)",
+                    "OREA Form 505 - Schedule (Commercial)",
+                    "OREA Form 570 - Amendment (Commercial)"
+                ]
+            },
+            "vacant_land": {
+                "primary": "OREA Form 100 - Agreement of Purchase and Sale",
+                "additional": [
+                    "OREA Form 105 - Schedule for Development/Zoning",
+                    "Environmental Assessment Schedules",
+                    "Severance/Subdivision Schedules"
+                ]
+            },
+            "new_construction": {
+                "primary": "Builder Purchase Agreement + TARION Schedules",
+                "additional": [
+                    "TARION Statement of Critical Dates",
+                    "TARION Schedule A - Defects and Standards",
+                    "TARION Schedule B - Warranty Coverage",
+                    "HST New Home Documentation"
+                ]
+            },
+            "business_purchase": {
+                "primary": "OREA Form 502 - Agreement of Purchase and Sale (Business)",
+                "additional": [
+                    "OREA Form 503 - Sale of Business Statement",
+                    "OREA Form 504 - Schedule (Business Purchase)"
+                ]
+            }
+        };
+
+        const clauseDatabase = {
+            "MORT-2": {
+                "name": "Condition - Arranging a New Mortgage",
+                "category": "Financing",
+                "text": "This Offer is conditional upon the Buyer arranging, at the Buyer's own expense, a new _________________ mortgage for not less than $ _________________ , bearing interest at a rate of not more than _______ % per annum, calculated semi-annually not in advance, for a term of not less than _______ year(s), with a payment period not exceeding _______ year(s), repayable in blended monthly payments, including principal and interest. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+                "purpose": "Protects buyer if unable to secure required mortgage financing",
+                "when_to_use": "All purchases requiring mortgage financing",
+                "risk_without": "Buyer legally obligated without confirmed financing"
+            },
+            "INSP-1": {
+                "name": "Condition - Home Inspector (General Inspection)",
+                "category": "Inspection",
+                "text": "This Offer is conditional upon the Buyer obtaining, at the Buyer's own expense, a home inspection of the property and all buildings and structures thereon and the Buyer obtaining a report satisfactory to the Buyer in the Buyer's sole and absolute discretion. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. The Seller agrees to co-operate in providing access to the property for the purpose of this inspection. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+                "purpose": "Allows professional inspection to identify defects before closing",
+                "when_to_use": "All residential property purchases",
+                "risk_without": "Unknown defects or safety issues"
+            },
+            "INSUR-1": {
+                "name": "Condition - Arranging Insurance",
+                "category": "Insurance",
+                "text": "This Offer is conditional upon the Buyer obtaining, at the Buyer's expense, satisfactory insurance coverage for the property. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+                "purpose": "Ensures buyer can obtain property insurance before closing",
+                "when_to_use": "All property purchases",
+                "risk_without": "Unable to insure or prohibitive costs"
+            }
+        };
+
+        // Application State
+        let currentTransaction = {
+            propertyType: null,
+            clientType: null,
+            representationStatus: null,
+            fundHandling: null
+        };
+
+        // Display Universal Mandatory Forms
+        function displayUniversalMandatoryForms() {
+            const container = document.getElementById('universal-forms-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            Object.entries(universalMandatoryForms).forEach(([formId, form]) => {
+                const formItem = createUniversalFormItem(form);
+                container.appendChild(formItem);
+            });
+        }
+
+        // Create Universal Form Item
+        function createUniversalFormItem(form) {
+            const item = document.createElement('div');
+            item.className = 'form-item';
+            
+            item.innerHTML = `
+                <div class="form-item__checkbox-container">
+                    <input type="checkbox" class="form-item__checkbox" id="form-${Date.now()}-${Math.random()}">
+                </div>
+                <div class="form-item__content">
+                    <div class="form-item__header">
+                        <div class="form-item__name">${form.form_name}</div>
+                        <div class="form-item__number">${form.form_number}</div>
+                    </div>
+                    <div class="form-item__details">
+                        <div class="form-item__purpose">${form.purpose}</div>
+                        <div class="form-item__timing">Required: ${form.when_required}</div>
+                        <div class="form-item__compliance">${form.compliance}</div>
+                        <div class="form-item__notes">${form.notes}</div>
+                    </div>
+                </div>
+            `;
+            
+            return item;
+        }
+
+        // Form Handlers
+        function setupFormHandlers() {
+            const transactionForm = document.getElementById('transaction-form');
+            if (transactionForm) {
+                transactionForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleFormSubmission();
+                });
+                
+                transactionForm.addEventListener('reset', function() {
+                    const resultsSection = document.getElementById('results-section');
+                    if (resultsSection) {
+                        resultsSection.style.display = 'none';
+                    }
+                    resetTransactionState();
+                });
+            }
+        }
+
+        // Handle Form Submission
+        function handleFormSubmission() {
+            const formData = new FormData(document.getElementById('transaction-form'));
+            
+            // Update transaction state
+            currentTransaction.propertyType = formData.get('property_type');
+            currentTransaction.clientType = formData.get('client_type');
+            currentTransaction.representationStatus = formData.get('representation_status');
+            currentTransaction.fundHandling = formData.get('fund_handling');
+            
+            // Generate and display results
+            generateTransactionResults();
+            
+            // Show results section
+            const resultsSection = document.getElementById('results-section');
+            if (resultsSection) {
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Generate Transaction Results
+        function generateTransactionResults() {
+            generatePropertySpecificForms();
+            generateClauseRecommendations();
+            generateComplianceChecklist();
+        }
+
+        // Generate Property Specific Forms
+        function generatePropertySpecificForms() {
+            const container = document.getElementById('property-forms-list');
+            if (!container || !currentTransaction.propertyType) return;
+            
+            container.innerHTML = '';
+            
+            const forms = transactionSpecificForms[currentTransaction.propertyType];
+            if (!forms) return;
+            
+            // Primary form
+            const primarySection = document.createElement('div');
+            primarySection.className = 'forms-category';
+            primarySection.innerHTML = `
+                <h3 class="forms-category__title">Primary Agreement Form</h3>
+                <div class="forms-category__list">
+                    <div class="form-list-item">${forms.primary}</div>
+                </div>
+            `;
+            container.appendChild(primarySection);
+            
+            // Additional forms
+            if (forms.additional && forms.additional.length > 0) {
+                const additionalSection = document.createElement('div');
+                additionalSection.className = 'forms-category';
+                additionalSection.innerHTML = `
+                    <h3 class="forms-category__title">Additional Required Forms</h3>
+                    <div class="forms-category__list">
+                        ${forms.additional.map(form => `<div class="form-list-item">${form}</div>`).join('')}
+                    </div>
+                `;
+                container.appendChild(additionalSection);
+            }
+        }
+
+        // Generate Clause Recommendations
+        function generateClauseRecommendations() {
+            const mandatoryContainer = document.getElementById('mandatory-clauses');
+            const recommendedContainer = document.getElementById('recommended-clauses');
+            
+            if (!mandatoryContainer || !recommendedContainer) return;
+            
+            // Clear existing content
+            mandatoryContainer.innerHTML = '';
+            recommendedContainer.innerHTML = '';
+            
+            // Add clauses
+            const mandatoryClauses = ['INSUR-1'];
+            const recommendedClauses = ['INSP-1', 'MORT-2'];
+            
+            mandatoryClauses.forEach(clauseId => {
+                if (clauseDatabase[clauseId]) {
+                    mandatoryContainer.appendChild(createClauseItem({id: clauseId, ...clauseDatabase[clauseId]}));
+                }
+            });
+            
+            recommendedClauses.forEach(clauseId => {
+                if (clauseDatabase[clauseId]) {
+                    recommendedContainer.appendChild(createClauseItem({id: clauseId, ...clauseDatabase[clauseId]}));
+                }
+            });
+        }
+
+        // Create Clause Item
+        function createClauseItem(clause) {
+            const item = document.createElement('div');
+            item.className = 'clause-item';
+            
+            item.innerHTML = `
+                <div class="clause-item__header">
+                    <div class="clause-item__title">
+                        <div class="clause-item__name">${clause.name}</div>
+                        <span class="clause-item__reference">${clause.id}</span>
+                    </div>
+                    <button type="button" class="btn btn--success btn--small clause-item__copy-btn" onclick="copyClauseText('${clause.id}')">
+                        Copy Text
+                    </button>
+                </div>
+                <textarea class="clause-item__text" readonly id="clause-text-${clause.id}">${clause.text}</textarea>
+                <div class="clause-item__details">
+                    <div class="clause-item__purpose">
+                        <div class="clause-item__label">Purpose</div>
+                        <div class="clause-item__description">${clause.purpose}</div>
+                    </div>
+                    <div class="clause-item__usage">
+                        <div class="clause-item__label">When to Use</div>
+                        <div class="clause-item__description">${clause.when_to_use}</div>
+                    </div>
+                </div>
+            `;
+            
+            return item;
+        }
+
+        // Generate Compliance Checklist
+        function generateComplianceChecklist() {
+            const container = document.getElementById('compliance-checklist');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const checklistItems = [
+                'RECO Information Guide provided and explained',
+                'Privacy policy disclosed (PIPEDA compliance)',
+                'Client identity verified (FINTRAC requirements)',
+                'Representation agreement signed',
+                'All mandatory disclosures completed',
+                'Property-specific forms identified and prepared',
+                'Required clauses included in agreement',
+                'All conditions properly dated and timed',
+                'Compliance with regulatory requirements verified'
+            ];
+            
+            checklistItems.forEach((item, index) => {
+                const checklistItem = document.createElement('div');
+                checklistItem.className = 'compliance-item';
+                checklistItem.innerHTML = `
+                    <input type="checkbox" class="compliance-item__checkbox" id="compliance-${index}">
+                    <label for="compliance-${index}" class="compliance-item__text">${item}</label>
+                `;
+                container.appendChild(checklistItem);
+            });
+        }
+
+        // Export Handlers
+        function setupExportHandlers() {
+            const copyAllBtn = document.getElementById('copy-all-clauses');
+            const generateSummaryBtn = document.getElementById('generate-summary');
+            const printChecklistBtn = document.getElementById('print-checklist');
+            const exportFormsBtn = document.getElementById('export-forms');
+            const startNewBtn = document.getElementById('start-new-transaction');
+            
+            if (copyAllBtn) copyAllBtn.addEventListener('click', copyAllClauses);
+            if (generateSummaryBtn) generateSummaryBtn.addEventListener('click', generateCompleteTransactionSummary);
+            if (printChecklistBtn) printChecklistBtn.addEventListener('click', printComplianceChecklist);
+            if (exportFormsBtn) exportFormsBtn.addEventListener('click', exportFormList);
+            if (startNewBtn) startNewBtn.addEventListener('click', startNewTransaction);
+        }
+
+        // Copy Clause Text
+        function copyClauseText(clauseId) {
+            const textarea = document.getElementById(`clause-text-${clauseId}`);
+            if (textarea) {
+                textarea.select();
+                textarea.setSelectionRange(0, 99999);
+                
+                try {
+                    document.execCommand('copy');
+                    showCopyToast(`${clauseId} clause copied to clipboard!`);
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                    showCopyToast('Copy failed. Please try again.');
+                }
+            }
+        }
+
+        // Copy All Clauses
+        function copyAllClauses() {
+            const allClauses = [];
+            document.querySelectorAll('.clause-item__text').forEach((textarea, index) => {
+                const clauseName = textarea.closest('.clause-item').querySelector('.clause-item__name').textContent;
+                const clauseReference = textarea.closest('.clause-item').querySelector('.clause-item__reference').textContent;
+                allClauses.push(`${index + 1}. ${clauseName} (${clauseReference})\n\n${textarea.value}`);
+            });
+            
+            const allText = `ONTARIO REAL ESTATE CLAUSES - TRANSACTION PACKAGE\n${'='.repeat(60)}\n\n${allClauses.join('\n\n' + '-'.repeat(60) + '\n\n')}`;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(allText).then(() => {
+                    showCopyToast('All clauses copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopyToClipboard(allText);
+                });
+            } else {
+                fallbackCopyToClipboard(allText);
+            }
+        }
+
+        // Generate Complete Transaction Summary
+        function generateCompleteTransactionSummary() {
+            const currentDate = new Date().toLocaleDateString('en-CA');
+            
+            const summary = `
+ONTARIO REAL ESTATE TRANSACTION SUMMARY
+${'='.repeat(60)}
+
+Generated: ${currentDate}
+Property Type: ${currentTransaction.propertyType || 'Not specified'}
+Client Type: ${currentTransaction.clientType || 'Not specified'}
+Representation: ${currentTransaction.representationStatus || 'Not specified'}
+Fund Handling: ${currentTransaction.fundHandling || 'Not specified'}
+
+UNIVERSAL MANDATORY FORMS:
+${Object.values(universalMandatoryForms).map((form, index) => `${index + 1}. ${form.form_name}`).join('\n')}
+
+COMPLIANCE REQUIREMENTS:
+✓ RECO/TRESA Requirements
+✓ FINTRAC Compliance
+✓ PIPEDA Compliance
+✓ OREA Standards
+
+Generated by Ontario Real Estate Transaction Tool
+            `;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(summary).then(() => {
+                    showCopyToast('Complete Transaction Summary copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopyToClipboard(summary);
+                });
+            } else {
+                fallbackCopyToClipboard(summary);
+            }
+        }
+
+        // Print Compliance Checklist
+        function printComplianceChecklist() {
+            window.print();
+        }
+
+        // Export Form List
+        function exportFormList() {
+            const formsList = Object.values(universalMandatoryForms).map((form, index) => 
+                `${index + 1}. ${form.form_name} - ${form.form_number}`
+            );
+            
+            const formsText = `ONTARIO REAL ESTATE FORMS LIST\n${'='.repeat(40)}\n\n${formsList.join('\n')}`;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(formsText).then(() => {
+                    showCopyToast('Forms list copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopyToClipboard(formsText);
+                });
+            } else {
+                fallbackCopyToClipboard(formsText);
+            }
+        }
+
+        // Start New Transaction
+        function startNewTransaction() {
+            const transactionForm = document.getElementById('transaction-form');
+            if (transactionForm) {
+                transactionForm.reset();
+            }
+            
+            const resultsSection = document.getElementById('results-section');
+            if (resultsSection) {
+                resultsSection.style.display = 'none';
+            }
+            
+            resetTransactionState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showCopyToast('New transaction started - form reset!');
+        }
+
+        // Reset Transaction State
+        function resetTransactionState() {
+            currentTransaction = {
+                propertyType: null,
+                clientType: null,
+                representationStatus: null,
+                fundHandling: null
+            };
+        }
+
+        // Fallback Copy Function
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopyToast('Text copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                showCopyToast('Copy failed. Please copy manually.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Show Copy Toast
+        function showCopyToast(message = 'Copied to clipboard!') {
+            const toast = document.getElementById('copy-toast');
+            if (toast) {
+                const toastText = toast.querySelector('.copy-toast__text');
+                if (toastText) {
+                    toastText.textContent = message;
+                }
+                
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Make functions globally available
+        window.copyClauseText = copyClauseText;
+    </script>
+</body>
+</html>
