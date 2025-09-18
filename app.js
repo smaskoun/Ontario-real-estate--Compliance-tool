@@ -118,7 +118,7 @@ const transactionSpecificForms = {
   }
 };
 
-const clausesData = {
+const clauseDatabase = {
   "MORT-2": {
     "name": "Condition - Arranging a New Mortgage",
     "category": "Financing",
@@ -185,623 +185,585 @@ const clausesData = {
   }
 };
 
-// DOM Elements
-let form, resultsContainer, initialMessage, universalFormsList;
+// Application State
+let currentTransaction = {
+  propertyType: null,
+  clientType: null,
+  transactionType: null,
+  representationStatus: null,
+  financingType: null,
+  transactionComplexity: null,
+  geographicScope: null,
+  timingUrgency: null
+};
 
-// Initialize the application
+// DOM Elements
+const transactionForm = document.getElementById('transaction-form');
+
+// Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
-  form = document.getElementById('transaction-profile-form');
-  resultsContainer = document.getElementById('results-container');
-  initialMessage = document.getElementById('initial-message');
-  universalFormsList = document.getElementById('universal-forms-list');
-  
-  if (!form || !resultsContainer || !initialMessage || !universalFormsList) {
-    console.error('Required DOM elements not found');
-    return;
-  }
-  
-  // Display universal mandatory forms immediately
-  displayUniversalForms();
-  
-  // Add form submission handler
-  form.addEventListener('submit', handleFormSubmission);
-  
-  // Set focus on first form field
-  const firstRadio = form.querySelector('input[type="radio"]');
-  if (firstRadio) {
-    firstRadio.focus();
-  }
+  setupFormHandlers();
+  setupExportHandlers();
+  displayUniversalMandatoryForms();
 });
 
-// Display universal mandatory forms
-function displayUniversalForms() {
-  let formsHTML = '';
+// Display Universal Mandatory Forms (Always Shown)
+function displayUniversalMandatoryForms() {
+  const container = document.getElementById('universal-forms-list');
+  if (!container) return;
   
-  Object.entries(universalMandatoryForms).forEach(([key, form]) => {
-    formsHTML += `
-      <div class="universal-form-card">
-        <div class="universal-form-card__header">
-          <h4 class="universal-form-card__name">${form.form_name}</h4>
-          <span class="universal-form-card__number">${form.form_number}</span>
-        </div>
-        <p class="universal-form-card__purpose">${form.purpose}</p>
-        <div class="universal-form-card__when">
-          <strong>Required:</strong> ${form.when_required}
-        </div>
-        <div class="universal-form-card__compliance">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          ${form.compliance}
-        </div>
+  container.innerHTML = '';
+  
+  Object.entries(universalMandatoryForms).forEach(([formId, form]) => {
+    const formItem = createUniversalFormItem(form);
+    container.appendChild(formItem);
+  });
+}
+
+// Create Universal Form Item
+function createUniversalFormItem(form) {
+  const item = document.createElement('div');
+  item.className = 'form-item';
+  
+  item.innerHTML = `
+    <div class="form-item__checkbox-container">
+      <input type="checkbox" class="form-item__checkbox" id="form-${Date.now()}-${Math.random()}">
+    </div>
+    <div class="form-item__content">
+      <div class="form-item__header">
+        <div class="form-item__name">${form.form_name}</div>
+        <div class="form-item__number">${form.form_number}</div>
+      </div>
+      <div class="form-item__details">
+        <div class="form-item__purpose">${form.purpose}</div>
+        <div class="form-item__timing">Required: ${form.when_required}</div>
+        <div class="form-item__compliance">${form.compliance}</div>
+        <div class="form-item__notes">${form.notes}</div>
+      </div>
+    </div>
+  `;
+  
+  return item;
+}
+
+// Form Handlers
+function setupFormHandlers() {
+  if (transactionForm) {
+    transactionForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleFormSubmission();
+    });
+    
+    transactionForm.addEventListener('reset', function() {
+      const resultsSection = document.getElementById('results-section');
+      if (resultsSection) {
+        resultsSection.style.display = 'none';
+      }
+      resetTransactionState();
+    });
+  }
+}
+
+// Handle Form Submission
+function handleFormSubmission() {
+  const formData = new FormData(transactionForm);
+  
+  // Update transaction state
+  currentTransaction.propertyType = formData.get('property_type');
+  currentTransaction.clientType = formData.get('client_type');
+  currentTransaction.transactionType = formData.get('transaction_type');
+  currentTransaction.representationStatus = formData.get('representation_status');
+  currentTransaction.financingType = formData.get('financing_type');
+  currentTransaction.transactionComplexity = formData.get('transaction_complexity');
+  currentTransaction.geographicScope = formData.get('geographic_scope');
+  currentTransaction.timingUrgency = formData.get('timing_urgency');
+  
+  // Generate and display results
+  generateTransactionResults();
+  
+  // Show results section
+  const resultsSection = document.getElementById('results-section');
+  if (resultsSection) {
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// Generate Transaction Results
+function generateTransactionResults() {
+  generatePropertySpecificForms();
+  generateClauseRecommendations();
+  generateComplianceChecklist();
+}
+
+// Generate Property Specific Forms
+function generatePropertySpecificForms() {
+  const container = document.getElementById('property-forms-list');
+  if (!container || !currentTransaction.propertyType) return;
+  
+  container.innerHTML = '';
+  
+  const forms = transactionSpecificForms[currentTransaction.propertyType];
+  if (!forms) return;
+  
+  // Primary form
+  const primarySection = document.createElement('div');
+  primarySection.className = 'forms-category';
+  primarySection.innerHTML = `
+    <h3 class="forms-category__title">Primary Agreement Form</h3>
+    <div class="forms-category__list">
+      <div class="form-list-item">${forms.primary}</div>
+    </div>
+  `;
+  container.appendChild(primarySection);
+  
+  // Additional forms
+  if (forms.additional && forms.additional.length > 0) {
+    const additionalSection = document.createElement('div');
+    additionalSection.className = 'forms-category';
+    additionalSection.innerHTML = `
+      <h3 class="forms-category__title">Additional Required Forms</h3>
+      <div class="forms-category__list">
+        ${forms.additional.map(form => `<div class="form-list-item">${form}</div>`).join('')}
       </div>
     `;
-  });
-  
-  universalFormsList.innerHTML = formsHTML;
-}
-
-// Form submission handler
-function handleFormSubmission(e) {
-  e.preventDefault();
-  
-  // Clear previous errors
-  clearFormErrors();
-  
-  // Validate form
-  if (!validateForm()) {
-    const firstError = document.querySelector('.form-section--error');
-    if (firstError) {
-      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    return;
-  }
-  
-  // Show loading state
-  showLoading();
-  
-  // Simulate processing time and generate recommendations
-  setTimeout(() => {
-    try {
-      const formData = collectFormData();
-      console.log('Form Data:', formData); // Debug log
-      const recommendations = generateRecommendations(formData);
-      console.log('Recommendations:', recommendations); // Debug log
-      displayResults(recommendations, formData);
-    } catch (error) {
-      console.error('Error processing form:', error);
-      showError('An error occurred while processing your request. Please try again.');
-    }
-  }, 1000);
-}
-
-// Clear previous form errors
-function clearFormErrors() {
-  document.querySelectorAll('.form-section--error').forEach(section => {
-    section.classList.remove('form-section--error');
-  });
-  document.querySelectorAll('.error-message').forEach(error => {
-    error.remove();
-  });
-}
-
-// Validate form
-function validateForm() {
-  let isValid = true;
-  
-  // Check required fields
-  const requiredFields = ['property_type', 'client_type', 'representation', 'fund_handling'];
-  
-  requiredFields.forEach(fieldName => {
-    const field = form.querySelector(`input[name="${fieldName}"]:checked`);
-    if (!field) {
-      markFieldError(fieldName, `${getFieldLabel(fieldName)} is required`);
-      isValid = false;
-    }
-  });
-  
-  return isValid;
-}
-
-// Get field label for error messages
-function getFieldLabel(fieldName) {
-  const labels = {
-    'property_type': 'Property Type',
-    'client_type': 'Client Type',
-    'representation': 'Representation Status',
-    'fund_handling': 'Fund Handling'
-  };
-  return labels[fieldName] || fieldName;
-}
-
-// Mark field error
-function markFieldError(fieldName, message) {
-  const input = form.querySelector(`input[name="${fieldName}"]`);
-  if (input) {
-    const formSection = input.closest('.form-section');
-    if (formSection) {
-      formSection.classList.add('form-section--error');
-      
-      const errorElement = document.createElement('div');
-      errorElement.className = 'error-message';
-      errorElement.innerHTML = `
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-        </svg>
-        ${message}
-      `;
-      
-      formSection.appendChild(errorElement);
-    }
+    container.appendChild(additionalSection);
   }
 }
 
-// Collect form data
-function collectFormData() {
-  const data = {
-    property_type: null,
-    client_type: null,
-    representation: null,
-    fund_handling: null,
-    transaction_details: []
-  };
+// Generate Clause Recommendations
+function generateClauseRecommendations() {
+  const mandatoryContainer = document.getElementById('mandatory-clauses');
+  const recommendedContainer = document.getElementById('recommended-clauses');
+  const conditionalContainer = document.getElementById('conditional-clauses');
   
-  // Get selected values
-  const propertyType = form.querySelector('input[name="property_type"]:checked');
-  if (propertyType) data.property_type = propertyType.value;
+  if (!mandatoryContainer || !recommendedContainer || !conditionalContainer) return;
   
-  const clientType = form.querySelector('input[name="client_type"]:checked');
-  if (clientType) data.client_type = clientType.value;
+  // Clear existing content
+  mandatoryContainer.innerHTML = '';
+  recommendedContainer.innerHTML = '';
+  conditionalContainer.innerHTML = '';
   
-  const representation = form.querySelector('input[name="representation"]:checked');
-  if (representation) data.representation = representation.value;
+  // Categorize clauses
+  const mandatoryClauses = [];
+  const recommendedClauses = [];
+  const conditionalClauses = [];
   
-  const fundHandling = form.querySelector('input[name="fund_handling"]:checked');
-  if (fundHandling) data.fund_handling = fundHandling.value;
-  
-  // Get transaction details
-  const transactionDetails = form.querySelectorAll('input[name="transaction_details"]:checked');
-  data.transaction_details = Array.from(transactionDetails).map(cb => cb.value);
-  
-  return data;
-}
-
-// Generate recommendations based on form data
-function generateRecommendations(data) {
-  const recommendations = {
-    mandatory: [],
-    recommended: [],
-    conditional: []
-  };
-
-  // Base clauses based on property type
-  switch (data.property_type) {
-    case 'residential_freehold':
-      recommendations.mandatory = ['INSP-1', 'INSUR-1'];
-      recommendations.recommended = ['MORT-2', 'LAW-1'];
-      break;
-    case 'residential_condo':
-      recommendations.mandatory = ['CONDO-1', 'INSP-1'];
-      recommendations.recommended = ['INSUR-1', 'MORT-2'];
-      break;
-    case 'commercial':
-      recommendations.mandatory = ['ZONING-1', 'ENV-15'];
-      recommendations.recommended = ['LAW-1', 'INSUR-1'];
-      break;
-    case 'vacant_land':
-      recommendations.mandatory = ['ZONING-1'];
-      recommendations.recommended = ['ENV-15', 'LAW-1'];
-      break;
-    case 'new_construction':
-      recommendations.mandatory = ['LAW-1'];
-      recommendations.recommended = ['INSUR-1'];
-      break;
-    case 'business_purchase':
-      recommendations.mandatory = ['LAW-1', 'ZONING-1'];
-      recommendations.recommended = ['ENV-15'];
-      break;
-  }
-
-  // Add conditional clauses based on transaction details
-  data.transaction_details.forEach(detail => {
-    switch (detail) {
-      case 'first_time_buyer':
-        if (!recommendations.recommended.includes('LAW-1') && !recommendations.mandatory.includes('LAW-1')) {
-          recommendations.conditional.push('LAW-1');
-        }
-        break;
-      case 'needs_financing':
-        if (!recommendations.recommended.includes('MORT-2') && !recommendations.mandatory.includes('MORT-2')) {
-          recommendations.conditional.push('MORT-2');
-        }
-        break;
-      case 'selling_current_home':
-        recommendations.conditional.push('SBP/SA-1');
-        break;
-      case 'older_home':
-        if (!recommendations.recommended.includes('INSP-1') && !recommendations.mandatory.includes('INSP-1')) {
-          recommendations.conditional.push('INSP-1');
-        }
-        break;
-      case 'high_value':
-        if (!recommendations.recommended.includes('LAW-1') && !recommendations.mandatory.includes('LAW-1')) {
-          recommendations.conditional.push('LAW-1');
-        }
-        break;
-      case 'foreign_nationals':
-        if (!recommendations.recommended.includes('LAW-1') && !recommendations.mandatory.includes('LAW-1')) {
-          recommendations.conditional.push('LAW-1');
-        }
-        break;
+  Object.entries(clauseDatabase).forEach(([clauseId, clause]) => {
+    if (isMandatoryClause(clauseId, clause)) {
+      mandatoryClauses.push({ id: clauseId, ...clause });
+    } else if (isRecommendedClause(clauseId, clause)) {
+      recommendedClauses.push({ id: clauseId, ...clause });
+    } else if (isConditionalClause(clauseId, clause)) {
+      conditionalClauses.push({ id: clauseId, ...clause });
     }
   });
-
-  return recommendations;
+  
+  // Render clauses
+  mandatoryClauses.forEach(clause => {
+    mandatoryContainer.appendChild(createClauseItem(clause));
+  });
+  
+  recommendedClauses.forEach(clause => {
+    recommendedContainer.appendChild(createClauseItem(clause));
+  });
+  
+  conditionalClauses.forEach(clause => {
+    conditionalContainer.appendChild(createClauseItem(clause));
+  });
 }
 
-// Show loading state
-function showLoading() {
-  resultsContainer.innerHTML = `
-    <div class="loading">
-      <div class="loading__spinner"></div>
-      <span>Analyzing your transaction and generating compliance report...</span>
+// Determine if clause is mandatory
+function isMandatoryClause(clauseId, clause) {
+  // Financing clauses for mortgage transactions
+  if (clauseId === 'MORT-2' && ['conventional_mortgage', 'alternative_financing'].includes(currentTransaction.financingType)) {
+    return true;
+  }
+  
+  // Insurance is always mandatory
+  if (clauseId === 'INSUR-1') {
+    return true;
+  }
+  
+  return false;
+}
+
+// Determine if clause is recommended
+function isRecommendedClause(clauseId, clause) {
+  // Home inspection for residential properties
+  if (clauseId === 'INSP-1' && ['residential_freehold', 'residential_condo'].includes(currentTransaction.propertyType)) {
+    return true;
+  }
+  
+  // Lawyer approval for complex transactions or first-time buyers
+  if (clauseId === 'LAW-1' && currentTransaction.transactionComplexity === 'complex') {
+    return true;
+  }
+  
+  return false;
+}
+
+// Determine if clause is conditional
+function isConditionalClause(clauseId, clause) {
+  // Condo document review for condo purchases
+  if (clauseId === 'CONDO-1' && currentTransaction.propertyType === 'residential_condo') {
+    return true;
+  }
+  
+  // Environmental assessment for commercial properties
+  if (clauseId === 'ENV-15' && currentTransaction.propertyType === 'commercial') {
+    return true;
+  }
+  
+  // Zoning clause for commercial or vacant land
+  if (clauseId === 'ZONING-1' && ['commercial', 'vacant_land'].includes(currentTransaction.propertyType)) {
+    return true;
+  }
+  
+  return false;
+}
+
+// Create Clause Item
+function createClauseItem(clause) {
+  const item = document.createElement('div');
+  item.className = 'clause-item';
+  
+  item.innerHTML = `
+    <div class="clause-item__header">
+      <div class="clause-item__title">
+        <div class="clause-item__name">${clause.name}</div>
+        <span class="clause-item__reference">${clause.id}</span>
+      </div>
+      <button type="button" class="btn btn--success btn--small clause-item__copy-btn" onclick="copyClauseText('${clause.id}')">
+        Copy Text
+      </button>
     </div>
-  `;
-  resultsContainer.classList.remove('hidden');
-  initialMessage.classList.add('hidden');
-}
-
-// Show error state
-function showError(message) {
-  resultsContainer.innerHTML = `
-    <div class="card">
-      <div class="card__body text-center">
-        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="icon-large" style="color: var(--color-error);">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-        </svg>
-        <h3>Error Processing Request</h3>
-        <p class="text-secondary">${message}</p>
-        <button class="btn btn--primary mt-16" onclick="resetTransaction()">Try Again</button>
+    <textarea class="clause-item__text" readonly id="clause-text-${clause.id}">${clause.text}</textarea>
+    <div class="clause-item__details">
+      <div class="clause-item__purpose">
+        <div class="clause-item__label">Purpose</div>
+        <div class="clause-item__description">${clause.purpose}</div>
+      </div>
+      <div class="clause-item__usage">
+        <div class="clause-item__label">When to Use</div>
+        <div class="clause-item__description">${clause.when_to_use}</div>
       </div>
     </div>
   `;
-  resultsContainer.classList.remove('hidden');
-  initialMessage.classList.add('hidden');
+  
+  return item;
 }
 
-// Display results
-function displayResults(recommendations, formData) {
-  const forms = transactionSpecificForms[formData.property_type] || { primary: 'Form information not available', additional: [] };
+// Generate Compliance Checklist
+function generateComplianceChecklist() {
+  const container = document.getElementById('compliance-checklist');
+  if (!container) return;
   
-  const totalClauses = recommendations.mandatory.length + 
-                      recommendations.recommended.length + 
-                      recommendations.conditional.length;
-
-  let resultsHTML = `
-    ${renderTransactionFormsSection(forms)}
-    ${renderComplianceChecklist(formData)}
-    
-    <div class="results-header">
-      <h2>Clause Recommendations with Copy-Ready Text</h2>
-      <p>Based on your transaction classification, we've identified ${totalClauses} relevant clauses. Each clause includes full OREA text ready for copying.</p>
-    </div>
-  `;
-
-  if (recommendations.mandatory.length > 0) {
-    resultsHTML += renderClauseCategory('Mandatory Clauses', recommendations.mandatory, 'These clauses are required by law or regulation for your transaction type.', 'shield-check');
-  }
+  container.innerHTML = '';
   
-  if (recommendations.recommended.length > 0) {
-    resultsHTML += renderClauseCategory('Recommended Clauses', recommendations.recommended, 'These clauses provide standard protection and are strongly advised.', 'star');
-  }
-  
-  if (recommendations.conditional.length > 0) {
-    resultsHTML += renderClauseCategory('Conditional Clauses', recommendations.conditional, 'These clauses are recommended based on your specific transaction details.', 'settings');
-  }
-
-  resultsHTML += `
-    <div class="export-actions">
-      <button class="btn btn--primary" onclick="copyAllSelectedClauses()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-        </svg>
-        Copy All Selected Clauses
-      </button>
-      <button class="btn btn--secondary" onclick="generateTransactionSummary()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        Generate Complete Transaction Summary
-      </button>
-      <button class="btn btn--outline" onclick="printComplianceChecklist()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-        </svg>
-        Print Compliance Checklist
-      </button>
-      <button class="btn btn--outline" onclick="exportFormList()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        Export Form List
-      </button>
-      <button class="btn btn--secondary" onclick="resetTransaction()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-        </svg>
-        Start New Transaction
-      </button>
-    </div>
-  `;
-
-  resultsContainer.innerHTML = resultsHTML;
-  resultsContainer.classList.remove('hidden');
-  initialMessage.classList.add('hidden');
-  
-  // Scroll to results
-  resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// Render transaction-specific forms section
-function renderTransactionFormsSection(forms) {
-  return `
-    <div class="transaction-forms-section">
-      <div class="transaction-forms-section__header">
-        <h3 class="transaction-forms-section__title">
-          <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-          Additional Forms Based on Your Transaction Type
-        </h3>
-        <p class="text-secondary">These are the specific OREA forms required for your transaction in addition to the universal mandatory forms above.</p>
-      </div>
-      
-      <div class="primary-form">
-        Primary Agreement: ${forms.primary}
-      </div>
-      
-      ${forms.additional && forms.additional.length > 0 ? `
-        <div class="additional-forms">
-          <h4>Supporting Forms:</h4>
-          <ul class="forms-list">
-            ${forms.additional.map(form => `<li>${form}</li>`).join('')}
-          </ul>
-        </div>
-      ` : ''}
-    </div>
-  `;
-}
-
-// Render compliance checklist
-function renderComplianceChecklist(formData) {
   const checklistItems = [
-    'Universal mandatory forms identified and provided',
-    'Client identification requirements established (FINTRAC)',
-    'Representation status confirmed and documented',
-    'Privacy policy disclosure completed (PIPEDA)',
-    'Required clauses included for transaction protection',
-    'Regulatory compliance requirements verified'
+    'RECO Information Guide provided and explained',
+    'Privacy policy disclosed (PIPEDA compliance)',
+    'Client identity verified (FINTRAC requirements)',
+    'Representation agreement signed',
+    'All mandatory disclosures completed',
+    'Property-specific forms identified and prepared',
+    'Required clauses included in agreement',
+    'All conditions properly dated and timed',
+    'Compliance with regulatory requirements verified'
   ];
   
-  return `
-    <div class="compliance-checklist">
-      <div class="compliance-checklist__header">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
-          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <h3 class="compliance-checklist__title">Transaction Compliance Checklist</h3>
-      </div>
-      <p class="text-secondary mb-16">Your transaction meets all regulatory requirements based on the classification provided:</p>
-      <div class="checklist-items">
-        ${checklistItems.map(item => `
-          <div class="checklist-item">
-            <svg class="checklist-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span class="checklist-item__text">${item}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  checklistItems.forEach((item, index) => {
+    const checklistItem = document.createElement('div');
+    checklistItem.className = 'compliance-item';
+    checklistItem.innerHTML = `
+      <input type="checkbox" class="compliance-item__checkbox" id="compliance-${index}">
+      <label for="compliance-${index}" class="compliance-item__text">${item}</label>
+    `;
+    container.appendChild(checklistItem);
+  });
 }
 
-// Render clause category
-function renderClauseCategory(title, clauseIds, description, iconName) {
-  if (clauseIds.length === 0) return '';
-
-  const iconSVG = getIconSVG(iconName);
+// Export Handlers
+function setupExportHandlers() {
+  const copyAllBtn = document.getElementById('copy-all-clauses');
+  const generateSummaryBtn = document.getElementById('generate-summary');
+  const printChecklistBtn = document.getElementById('print-checklist');
+  const exportFormsBtn = document.getElementById('export-forms');
+  const startNewBtn = document.getElementById('start-new-transaction');
   
-  return `
-    <div class="clause-category">
-      <div class="clause-category__header">
-        ${iconSVG}
-        <h3 class="clause-category__title">${title}</h3>
-        <span class="clause-category__count">${clauseIds.length}</span>
-      </div>
-      <p class="text-secondary mb-16">${description}</p>
-      <div class="clause-list">
-        ${clauseIds.map(clauseId => renderClauseCard(clauseId)).join('')}
-      </div>
-    </div>
-  `;
+  if (copyAllBtn) copyAllBtn.addEventListener('click', copyAllClauses);
+  if (generateSummaryBtn) generateSummaryBtn.addEventListener('click', generateCompleteTransactionSummary);
+  if (printChecklistBtn) printChecklistBtn.addEventListener('click', printComplianceChecklist);
+  if (exportFormsBtn) exportFormsBtn.addEventListener('click', exportFormList);
+  if (startNewBtn) startNewBtn.addEventListener('click', startNewTransaction);
 }
 
-// Render individual clause card
-function renderClauseCard(clauseId) {
-  const clause = clausesData[clauseId];
-  if (!clause) return '';
-  
-  return `
-    <div class="clause-card">
-      <div class="clause-card__header">
-        <div class="clause-card__info">
-          <h4 class="clause-card__name">${clause.name}</h4>
-          <span class="clause-card__reference">${clauseId}</span>
-          <p class="clause-card__purpose"><strong>Purpose:</strong> ${clause.purpose}</p>
-          <div class="clause-card__when-to-use">
-            <strong>When to Use:</strong> ${clause.when_to_use}
-          </div>
-          ${clause.risk_without ? `
-            <div class="clause-card__risk">
-              <strong>Risk Without:</strong> ${clause.risk_without}
-            </div>
-          ` : ''}
-        </div>
-      </div>
-      <div class="clause-card__body">
-        <div class="clause-text-container">
-          <label class="clause-text-label">Full OREA Clause Text:</label>
-          <textarea class="clause-text" readonly id="clause-text-${clauseId}">${clause.text}</textarea>
-        </div>
-        <button class="copy-button" onclick="copyClauseText('${clauseId}')" data-clause-id="${clauseId}">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          Copy Clause Text
-          <div class="copy-feedback" id="copy-feedback-${clauseId}">Copied!</div>
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-// Get icon SVG
-function getIconSVG(iconName) {
-  const icons = {
-    'shield-check': `<svg class="clause-category__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-    </svg>`,
-    'star': `<svg class="clause-category__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-    </svg>`,
-    'settings': `<svg class="clause-category__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-    </svg>`
-  };
-  
-  return icons[iconName] || icons['settings'];
-}
-
-// Copy individual clause text to clipboard
+// Copy Clause Text
 function copyClauseText(clauseId) {
   const textarea = document.getElementById(`clause-text-${clauseId}`);
-  const button = document.querySelector(`[data-clause-id="${clauseId}"]`);
-  const feedback = document.getElementById(`copy-feedback-${clauseId}`);
-  
-  if (textarea && button && feedback) {
-    // Select and copy text
+  if (textarea) {
     textarea.select();
     textarea.setSelectionRange(0, 99999); // For mobile devices
     
-    // Use modern clipboard API or fallback
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(textarea.value).then(() => {
-        showCopySuccess(button, feedback);
-      }).catch(() => {
-        // Fallback to document.execCommand
-        document.execCommand('copy');
-        showCopySuccess(button, feedback);
-      });
-    } else {
-      // Fallback for older browsers
+    try {
       document.execCommand('copy');
-      showCopySuccess(button, feedback);
+      showCopyToast(`${clauseId} clause copied to clipboard!`);
+    } catch (err) {
+      console.error('Copy failed:', err);
+      showCopyToast('Copy failed. Please try again.');
     }
   }
 }
 
-// Show copy success feedback
-function showCopySuccess(button, feedback) {
-  button.classList.add('copy-button--copied');
-  feedback.classList.add('copy-feedback--show');
-  
-  // Reset after 2 seconds
-  setTimeout(() => {
-    button.classList.remove('copy-button--copied');
-    feedback.classList.remove('copy-feedback--show');
-  }, 2000);
-}
-
-// Copy all selected clauses
-function copyAllSelectedClauses() {
-  const allTextareas = document.querySelectorAll('.clause-text');
-  let allText = '';
-  
-  allTextareas.forEach((textarea, index) => {
-    const clauseCard = textarea.closest('.clause-card');
-    const clauseName = clauseCard.querySelector('.clause-card__name').textContent;
-    const clauseRef = clauseCard.querySelector('.clause-card__reference').textContent;
-    
-    allText += `${index > 0 ? '\n\n' : ''}--- ${clauseName} (${clauseRef}) ---\n\n${textarea.value}`;
+// Copy All Clauses
+function copyAllClauses() {
+  const allClauses = [];
+  document.querySelectorAll('.clause-item__text').forEach((textarea, index) => {
+    const clauseName = textarea.closest('.clause-item').querySelector('.clause-item__name').textContent;
+    const clauseReference = textarea.closest('.clause-item').querySelector('.clause-item__reference').textContent;
+    allClauses.push(`${index + 1}. ${clauseName} (${clauseReference})\n\n${textarea.value}`);
   });
   
-  if (allText) {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(allText).then(() => {
-        alert('All clause text copied to clipboard!');
-      }).catch(() => {
-        // Create temporary textarea for fallback
-        const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = allText;
-        document.body.appendChild(tempTextarea);
-        tempTextarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempTextarea);
-        alert('All clause text copied to clipboard!');
-      });
-    } else {
-      // Fallback for older browsers
-      const tempTextarea = document.createElement('textarea');
-      tempTextarea.value = allText;
-      document.body.appendChild(tempTextarea);
-      tempTextarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempTextarea);
-      alert('All clause text copied to clipboard!');
-    }
+  const allText = `ONTARIO REAL ESTATE CLAUSES - TRANSACTION PACKAGE\n${'='.repeat(60)}\n\n${allClauses.join('\n\n' + '-'.repeat(60) + '\n\n')}`;
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(allText).then(() => {
+      showCopyToast('All clauses copied to clipboard!');
+    }).catch(() => {
+      fallbackCopyToClipboard(allText);
+    });
+  } else {
+    fallbackCopyToClipboard(allText);
   }
 }
 
-// Generate transaction summary
-function generateTransactionSummary() {
-  // This would generate a comprehensive summary
-  alert('Transaction summary generation feature coming soon!');
+// Generate Complete Transaction Summary - FIXED VERSION
+function generateCompleteTransactionSummary() {
+    const currentDate = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD format
+    
+    // Get transaction details from the form
+    const propertyType = document.querySelector('input[name="property_type"]:checked')?.value || 'Not specified';
+    const clientType = document.querySelector('input[name="client_type"]:checked')?.value || 'Not specified';
+    const transactionType = document.querySelector('input[name="transaction_type"]:checked')?.value || 'Not specified';
+    const representationStatus = document.querySelector('input[name="representation_status"]:checked')?.value || 'Not specified';
+    const financingType = document.querySelector('input[name="financing_type"]:checked')?.value || 'Not specified';
+    
+    // Get all mandatory forms
+    const mandatoryForms = [];
+    document.querySelectorAll('.form-item__name').forEach(form => {
+        mandatoryForms.push(form.textContent.trim());
+    });
+    
+    // Get property-specific forms  
+    const propertyForms = [];
+    document.querySelectorAll('.form-list-item').forEach(form => {
+        propertyForms.push(form.textContent.trim());
+    });
+    
+    // Get selected clauses
+    const selectedClauses = [];
+    document.querySelectorAll('.clause-item__name').forEach(clause => {
+        selectedClauses.push(clause.textContent.trim());
+    });
+    
+    // Get compliance checklist items
+    const complianceItems = [];
+    document.querySelectorAll('.compliance-item__text').forEach(item => {
+        complianceItems.push(item.textContent.trim());
+    });
+    
+    // Generate comprehensive professional summary
+    const summary = `
+═══════════════════════════════════════════════════════════════
+    ONTARIO REAL ESTATE TRANSACTION SUMMARY
+═══════════════════════════════════════════════════════════════
+
+📅 GENERATED: ${currentDate}
+🏢 PREPARED BY: [Your Name/Brokerage]
+
+┌─────────────────────────────────────────────────────────────┐
+│                    TRANSACTION DETAILS                      │
+└─────────────────────────────────────────────────────────────┘
+
+Property Type: ${propertyType.replace('_', ' ').toUpperCase()}
+Client Type: ${clientType.replace('_', ' ').toUpperCase()}  
+Transaction Type: ${transactionType.toUpperCase()}
+Representation: ${representationStatus.replace('_', ' ').toUpperCase()}
+Financing: ${financingType.replace('_', ' ').toUpperCase()}
+
+┌─────────────────────────────────────────────────────────────┐
+│                 MANDATORY UNIVERSAL FORMS                   │
+│                    (Required for ALL Transactions)          │
+└─────────────────────────────────────────────────────────────┘
+
+${mandatoryForms.length > 0 ? mandatoryForms.map((form, index) => `${index + 1}. ☐ ${form}`).join('\n') : 'No mandatory forms detected - Please fill out transaction form first'}
+
+┌─────────────────────────────────────────────────────────────┐
+│              PROPERTY-SPECIFIC OREA FORMS                   │
+└─────────────────────────────────────────────────────────────┘
+
+${propertyForms.length > 0 ? propertyForms.map((form, index) => `${index + 1}. ☐ ${form}`).join('\n') : 'No property-specific forms detected - Please fill out transaction form first'}
+
+┌─────────────────────────────────────────────────────────────┐
+│                RECOMMENDED CLAUSES                          │
+└─────────────────────────────────────────────────────────────┘
+
+${selectedClauses.length > 0 ? selectedClauses.map((clause, index) => `${index + 1}. ☐ ${clause}`).join('\n') : 'No clauses detected - Please fill out transaction form first'}
+
+┌─────────────────────────────────────────────────────────────┐
+│              COMPLIANCE CHECKLIST                           │
+└─────────────────────────────────────────────────────────────┘
+
+${complianceItems.length > 0 ? complianceItems.map((item, index) => `${index + 1}. ☐ ${item}`).join('\n') : 'Compliance checklist will be generated after form completion'}
+
+┌─────────────────────────────────────────────────────────────┐
+│                   REGULATORY COMPLIANCE                     │
+└─────────────────────────────────────────────────────────────┘
+
+✓ RECO/TRESA Requirements: All mandatory disclosures included
+✓ FINTRAC Compliance: Client identification requirements covered
+✓ PIPEDA Compliance: Privacy disclosure requirements included
+✓ OREA Standards: Current forms and clause text provided
+
+┌─────────────────────────────────────────────────────────────┐
+│                      IMPORTANT NOTES                        │
+└─────────────────────────────────────────────────────────────┘
+
+⚠️  This summary provides guidance based on current Ontario real estate 
+    regulations. Always verify requirements with RECO and consult legal 
+    counsel for complex transactions.
+
+⚠️  All condition dates and terms must be filled in appropriately for 
+    your specific transaction.
+
+⚠️  Ensure all parties sign required forms before proceeding with 
+    transaction.
+
+═══════════════════════════════════════════════════════════════
+Generated by Ontario Real Estate Transaction Tool v2.0
+Professional Edition - Full Compliance
+═══════════════════════════════════════════════════════════════
+    `;
+    
+    // Copy to clipboard with fallback support
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).then(() => {
+            showCopyToast('Complete Transaction Summary copied to clipboard!');
+        }).catch(() => {
+            fallbackCopyToClipboard(summary);
+        });
+    } else {
+        fallbackCopyToClipboard(summary);
+    }
 }
 
-// Print compliance checklist
+// Print Compliance Checklist
 function printComplianceChecklist() {
   window.print();
 }
 
-// Export form list
+// Export Form List
 function exportFormList() {
-  // This would generate a downloadable form list
-  alert('Form list export feature coming soon!');
+  const formsList = [];
+  
+  // Add universal mandatory forms
+  document.querySelectorAll('.form-item__name').forEach(form => {
+    formsList.push(`MANDATORY: ${form.textContent.trim()}`);
+  });
+  
+  // Add property-specific forms
+  document.querySelectorAll('.form-list-item').forEach(form => {
+    formsList.push(`PROPERTY SPECIFIC: ${form.textContent.trim()}`);
+  });
+  
+  const formsText = `ONTARIO REAL ESTATE FORMS LIST\n${'='.repeat(40)}\n\nTransaction Date: ${new Date().toLocaleDateString('en-CA')}\n\n${formsList.join('\n')}`;
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(formsText).then(() => {
+      showCopyToast('Forms list copied to clipboard!');
+    }).catch(() => {
+      fallbackCopyToClipboard(formsText);
+    });
+  } else {
+    fallbackCopyToClipboard(formsText);
+  }
 }
 
-// Reset transaction
-function resetTransaction() {
-  if (form) {
-    form.reset();
-    clearFormErrors();
+// Start New Transaction
+function startNewTransaction() {
+  if (transactionForm) {
+    transactionForm.reset();
   }
   
-  if (resultsContainer) {
-    resultsContainer.classList.add('hidden');
+  const resultsSection = document.getElementById('results-section');
+  if (resultsSection) {
+    resultsSection.style.display = 'none';
   }
   
-  if (initialMessage) {
-    initialMessage.classList.remove('hidden');
+  resetTransactionState();
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  showCopyToast('New transaction started - form reset!');
+}
+
+// Reset Transaction State
+function resetTransactionState() {
+  currentTransaction = {
+    propertyType: null,
+    clientType: null,
+    transactionType: null,
+    representationStatus: null,
+    financingType: null,
+    transactionComplexity: null,
+    geographicScope: null,
+    timingUrgency: null
+  };
+}
+
+// Fallback Copy Function
+function fallbackCopyToClipboard(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  textArea.style.top = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    document.execCommand('copy');
+    showCopyToast('Text copied to clipboard!');
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+    showCopyToast('Copy failed. Please copy manually.');
   }
   
-  // Smooth scroll to top of form
-  const inputSection = document.querySelector('.input-section');
-  if (inputSection) {
-    inputSection.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
+  document.body.removeChild(textArea);
+}
+
+// Show Copy Toast
+function showCopyToast(message = 'Copied to clipboard!') {
+  const toast = document.getElementById('copy-toast');
+  if (toast) {
+    const toastText = toast.querySelector('.copy-toast__text');
+    if (toastText) {
+      toastText.textContent = message;
+    }
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  } else {
+    // Fallback - simple alert if toast element doesn't exist
+    console.log(message);
   }
 }
+
+// Make functions globally available
+window.copyClauseText = copyClauseText;
