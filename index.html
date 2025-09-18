@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Ontario Real Estate Transaction Tool - Full Compliance Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__branding">
+                    <h1 class="header__title">Complete Ontario Real Estate Transaction Tool - Full Compliance Edition</h1>
+                    <p class="header__subtitle">Complete Form & Clause Text with RECO/FINTRAC Compliance</p>
+                </div>
+                <div class="header__logo">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Mandatory Universal Forms - Always Displayed -->
+            <div class="universal-forms-section">
+                <div class="card warning-card">
+                    <div class="card__header">
+                        <div class="warning-header">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                <path d="M12 9v4"/>
+                                <path d="m12 17 .01 0"/>
+                            </svg>
+                            <h2>⚠️ UNIVERSAL MANDATORY FORMS - Required for Every Transaction</h2>
+                        </div>
+                        <p class="compliance-notice">These forms are required by RECO, FINTRAC, and PIPEDA for ALL Ontario real estate transactions regardless of type.</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="universal-forms-grid" id="universal-forms-list">
+                            <!-- Universal forms will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main__layout">
+                <div class="input-section">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>Complete Transaction Profile</h2>
+                            <p class="text-secondary">Classify your transaction for accurate form and clause recommendations with full compliance guidance.</p>
+                        </div>
+                        <div class="card__body">
+                            <form id="transaction-profile-form" class="form">
+                                <!-- Essential Classifications -->
+                                <div class="form-section">
+                                    <h3 class="form-section__title">Essential Classifications <span class="required">*</span></h3>
+                                    
+                                    <!-- Property Type -->
+                                    <div class="form-group">
+                                        <label class="form-label">Property Type <span class="required">*</span></label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="residential_freehold" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Residential Freehold</strong>
+                                                    <small>Houses, townhomes, detached properties</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="residential_condo" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Residential Condo</strong>
+                                                    <small>Condo units, apartments</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="commercial" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Commercial</strong>
+                                                    <small>Office, retail, industrial</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="vacant_land" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Vacant Land</strong>
+                                                    <small>Undeveloped lots</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="new_construction" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>New Construction</strong>
+                                                    <small>Pre-construction, newly built</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="property_type" value="business_purchase" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Business Purchase</strong>
+                                                    <small>Buying an existing business</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Client Type -->
+                                    <div class="form-group">
+                                        <label class="form-label">Client Type <span class="required">*</span></label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="client_type" value="individual" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Individual</strong>
+                                                    <small>Personal buyers/sellers</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="client_type" value="corporate" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Corporate</strong>
+                                                    <small>Companies, corporations</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="client_type" value="mixed" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Mixed</strong>
+                                                    <small>Individual + Corporate</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Representation Status -->
+                                    <div class="form-group">
+                                        <label class="form-label">Representation Status <span class="required">*</span></label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="representation" value="client_represented" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Client Represented</strong>
+                                                    <small>You represent the client</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="representation" value="self_represented" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Self-Represented</strong>
+                                                    <small>Party represents themselves</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="representation" value="multiple_representation" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Multiple Representation</strong>
+                                                    <small>You represent both parties</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fund Handling -->
+                                    <div class="form-group">
+                                        <label class="form-label">Fund Handling <span class="required">*</span></label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="fund_handling" value="deposits_received" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>Deposits Received by Brokerage</strong>
+                                                    <small>You will handle client funds</small>
+                                                </span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="fund_handling" value="no_funds" required>
+                                                <span class="radio-custom"></span>
+                                                <span class="radio-text">
+                                                    <strong>No Funds Handled</strong>
+                                                    <small>No deposit handling</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Additional Classifications -->
+                                <div class="form-section">
+                                    <h3 class="form-section__title">Additional Classifications (For Enhanced Accuracy)</h3>
+                                    
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="high_value">
+                                            <span class="checkbox-custom"></span>
+                                            High Value ($1M+)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="out_of_province">
+                                            <span class="checkbox-custom"></span>
+                                            Out-of-Province Clients
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="foreign_nationals">
+                                            <span class="checkbox-custom"></span>
+                                            Foreign Nationals
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="expedited">
+                                            <span class="checkbox-custom"></span>
+                                            Expedited Timeline (<30 days)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="first_time_buyer">
+                                            <span class="checkbox-custom"></span>
+                                            First-time buyer
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="needs_financing">
+                                            <span class="checkbox-custom"></span>
+                                            Needs financing
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="selling_current_home">
+                                            <span class="checkbox-custom"></span>
+                                            Selling current home to buy
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="rural_property">
+                                            <span class="checkbox-custom"></span>
+                                            Rural property
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="transaction_details" value="older_home">
+                                            <span class="checkbox-custom"></span>
+                                            Older home (40+ years)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn--primary btn--lg btn--full-width">
+                                        Generate Complete Compliance Report
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <div id="results-container" class="results-container hidden">
+                        <!-- Results will be dynamically generated here -->
+                    </div>
+                    
+                    <div id="initial-message" class="initial-message">
+                        <div class="card">
+                            <div class="card__body text-center">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-large">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3>Complete Compliance Analysis Ready</h3>
+                                <p class="text-secondary">Classify your transaction to receive your complete compliance report with all mandatory forms, recommended clauses, and regulatory requirements.</p>
+                                <div class="features-list">
+                                    <div class="feature-item">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        RECO/FINTRAC/PIPEDA compliance
+                                    </div>
+                                    <div class="feature-item">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        Complete transaction-specific forms
+                                    </div>
+                                    <div class="feature-item">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        Full clause text with copy functionality
+                                    </div>
+                                    <div class="feature-item">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        Interactive compliance checklist
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__disclaimer">
+                    <h4>Important Compliance Disclaimer</h4>
+                    <p><strong>This tool provides guidance only and does not constitute legal advice.</strong> All forms and clauses must be reviewed with qualified legal counsel. Regulatory requirements are subject to change. Always verify current RECO, FINTRAC, and OREA requirements before use. This tool does not replace professional legal or regulatory advice.</p>
+                </div>
+                <div class="footer__resources">
+                    <h4>Official Resources</h4>
+                    <ul class="footer__links">
+                        <li><a href="https://www.reco.on.ca" target="_blank">RECO - Real Estate Council of Ontario</a></li>
+                        <li><a href="https://www.fintrac-canafe.gc.ca" target="_blank">FINTRAC - Financial Intelligence Unit</a></li>
+                        <li><a href="https://www.orea.com" target="_blank">OREA Forms and Resources</a></li>
+                        <li><a href="https://www.priv.gc.ca" target="_blank">Privacy Commissioner of Canada</a></li>
+                    </ul>
+                </div>
+                <div class="footer__contact">
+                    <p class="footer__copyright">© 2025 Complete Ontario Real Estate Transaction Tool - Full Compliance Edition</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
