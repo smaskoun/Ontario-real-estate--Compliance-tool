@@ -767,3 +767,20 @@ function showCopyToast(message = 'Copied to clipboard!') {
 
 // Make functions globally available
 window.copyClauseText = copyClauseText;
+// Universal Button Connector - Fixes Generate Complete Transaction Summary button
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        // Find all buttons and connect the Generate Complete Transaction Summary
+        document.querySelectorAll('button').forEach(button => {
+            const buttonText = button.textContent.toLowerCase();
+            
+            if (buttonText.includes('generate complete') || 
+                buttonText.includes('transaction summary') ||
+                buttonText.includes('compliance report')) {
+                
+                console.log('Connecting button:', button.textContent);
+                button.onclick = generateCompleteTransactionSummary;
+            }
+        });
+    }, 2000);
+});
