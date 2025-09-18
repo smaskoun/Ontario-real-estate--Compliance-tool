@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="theme-toggle-icon" id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="m12 7-4-4M12 17l-4 4M17 12h4M7 12H3M15.54 8.46l2.83-2.83M5.17 19.83l2.83-2.83M8.46 15.54l-2.83 2.83M19.83 5.17l-2.83 2.83"></path>
+        </svg>
+        <svg class="theme-toggle-icon hidden" id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span id="theme-text">Dark</span>
+    </button>
+
     <header class="header">
         <div class="container">
             <div class="header__content">
