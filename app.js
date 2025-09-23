@@ -810,5 +810,50 @@ function showCopyToast(message = 'Copied to clipboard!') {
   }
 }
 
+// Dynamic Clause Filtering
+function setupClauseFiltering() {
+    const checkboxes = document.querySelectorAll('input[name="transaction_details"]');
+    const clauseContainer = document.getElementById('clause-container');
+
+    // Function to filter and display clauses
+    function filterClauses() {
+        const selectedCategories = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        // Clear existing clauses
+        clauseContainer.innerHTML = '';
+
+        // Filter clauses based on selected categories
+        const filteredClauses = Object.entries(clauseDatabase).filter(([key, clause]) => {
+            return selectedCategories.some(category => clause.categories.includes(category));
+        });
+
+        // Display filtered clauses
+        filteredClauses.forEach(([key, clause]) => {
+            const clauseElement = document.createElement('div');
+            clauseElement.className = 'clause-item';
+            clauseElement.innerHTML = `
+                <h3 class="clause-item__name">${clause.name}</h3>
+                <p class="clause-item__text">${clause.text}</p>
+            `;
+            clauseContainer.appendChild(clauseElement);
+        });
+    }
+
+    // Add event listeners to checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', filterClauses);
+    });
+
+    // Initial display
+    filterClauses();
+}
+
+// Call the setup function on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    setupClauseFiltering();
+});
+
 // Make functions globally available
 window.copyClauseText = copyClauseText;
