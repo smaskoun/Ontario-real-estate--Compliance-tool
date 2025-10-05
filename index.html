@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Ontario Real Estate Transaction Tool (Personal Use)</title>
+    <title>Ontario Real Estate & Rental Transaction Tool (Personal Use)</title>
     <style>
-        /* MOBILE-FIRST RESPONSIVE DESIGN - COMPLETE WORKING VERSION */
+        /* MOBILE-FIRST RESPONSIVE DESIGN - COMPLETE WORKING VERSION WITH RENTAL CATEGORIES */
         :root {
             --primary: #1e40af;
             --primary-light: #3b82f6;
@@ -13,6 +13,7 @@
             --success: #059669;
             --warning: #d97706;
             --danger: #dc2626;
+            --info: #0891b2;
             
             /* Light Theme Default */
             --bg-main: #ffffff;
@@ -248,7 +249,13 @@
             background: linear-gradient(135deg, rgba(217, 119, 6, 0.03) 0%, var(--bg-main) 100%);
         }
 
-        .warning-header {
+        /* Info Card */
+        .info-card {
+            border-left: 4px solid var(--info);
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.03) 0%, var(--bg-main) 100%);
+        }
+
+        .warning-header, .info-header {
             display: flex;
             align-items: flex-start;
             gap: var(--space-sm);
@@ -260,19 +267,29 @@
             line-height: 1.4;
         }
 
-        .warning-icon {
+        .info-header h2 {
+            color: var(--info);
+            font-size: var(--text-md);
+            line-height: 1.4;
+        }
+
+        .warning-icon, .info-icon {
             color: var(--warning);
             flex-shrink: 0;
             margin-top: 2px;
         }
 
+        .info-icon {
+            color: var(--info);
+        }
+
         @media (min-width: 768px) {
-            .warning-header {
+            .warning-header, .info-header {
                 align-items: center;
                 gap: var(--space-md);
             }
 
-            .warning-header h2 {
+            .warning-header h2, .info-header h2 {
                 font-size: var(--text-lg);
             }
         }
@@ -692,7 +709,7 @@
         }
 
         .form-list-item::before {
-            content: 'â€¢';
+            content: '•';
             color: var(--primary);
             font-weight: bold;
             position: absolute;
@@ -1051,8 +1068,8 @@
         <div class="container">
             <div class="header__content">
                 <div class="header__branding">
-                    <h1 class="header__title">Ontario Real Estate Transaction Tool</h1>
-                    <p class="header__subtitle">Personal Use Only | Full Compliance Guidance | RECO | FINTRAC | PIPEDA</p>
+                    <h1 class="header__title">Ontario Real Estate & Rental Transaction Tool</h1>
+                    <p class="header__subtitle">Personal Use Only | Full Compliance | RECO | FINTRAC | PIPEDA | RTA</p>
                 </div>
                 <div class="header__logo">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1076,13 +1093,34 @@
                                 <path d="M12 9v4"/>
                                 <path d="m12 17 .01 0"/>
                             </svg>
-                            <h2>âš ï¸ UNIVERSAL MANDATORY FORMS<br>Required for Every Transaction</h2>
+                            <h2>⚠️ UNIVERSAL MANDATORY FORMS<br>Required for Every Transaction</h2>
                         </div>
                         <p class="text-secondary">These forms are required by RECO, FINTRAC, and PIPEDA for ALL Ontario real estate transactions regardless of type.</p>
                     </div>
                     <div class="card__body">
                         <div id="universal-forms-list" class="universal-forms-list">
                             <!-- Forms will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Rental Specific Universal Forms -->
+            <div class="rental-universal-forms-section">
+                <div class="card info-card">
+                    <div class="card__header">
+                        <div class="info-header">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="info-icon">
+                                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            <h2>🏠 RENTAL UNIVERSAL MANDATORY FORMS<br>Required for All Ontario Leases</h2>
+                        </div>
+                        <p class="text-secondary">Additional forms required specifically for rental transactions under Ontario's Residential Tenancies Act and Commercial Leasing laws.</p>
+                    </div>
+                    <div class="card__body">
+                        <div id="rental-universal-forms-list" class="universal-forms-list">
+                            <!-- Rental universal forms will be populated here by JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -1101,48 +1139,113 @@
                                 <h3 class="form-section__title">Essential Classifications <span class="required">*</span></h3>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">Property Type</label>
+                                    <label class="form-label">Transaction Type</label>
                                     <div class="form-group__options">
                                         <label class="radio-option">
+                                            <input type="radio" name="transaction_type" value="purchase_sale" required>
+                                            <div>
+                                                <span class="radio-option__label">Purchase & Sale</span>
+                                                <div class="radio-option__description">Buying or selling real estate</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="transaction_type" value="rental" required>
+                                            <div>
+                                                <span class="radio-option__label">Rental & Leasing</span>
+                                                <div class="radio-option__description">Residential or commercial leasing</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Property Type</label>
+                                    <div class="form-group__options">
+                                        <!-- Purchase/Sale Options -->
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="residential_freehold" required>
                                             <div>
                                                 <span class="radio-option__label">Residential Freehold</span>
                                                 <div class="radio-option__description">Houses, townhomes, detached properties</div>
                                             </div>
                                         </label>
-                                        <label class="radio-option">
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="residential_condo" required>
                                             <div>
                                                 <span class="radio-option__label">Residential Condo</span>
                                                 <div class="radio-option__description">Condo units, apartments</div>
                                             </div>
                                         </label>
-                                        <label class="radio-option">
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="commercial" required>
                                             <div>
                                                 <span class="radio-option__label">Commercial</span>
                                                 <div class="radio-option__description">Office, retail, industrial</div>
                                             </div>
                                         </label>
-                                        <label class="radio-option">
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="vacant_land" required>
                                             <div>
                                                 <span class="radio-option__label">Vacant Land</span>
                                                 <div class="radio-option__description">Undeveloped lots</div>
                                             </div>
                                         </label>
-                                        <label class="radio-option">
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="new_construction" required>
                                             <div>
                                                 <span class="radio-option__label">New Construction</span>
                                                 <div class="radio-option__description">Pre-construction, newly built</div>
                                             </div>
                                         </label>
-                                        <label class="radio-option">
+                                        <label class="radio-option purchase-sale-option">
                                             <input type="radio" name="property_type" value="business_purchase" required>
                                             <div>
                                                 <span class="radio-option__label">Business Purchase</span>
                                                 <div class="radio-option__description">Buying an existing business</div>
+                                            </div>
+                                        </label>
+
+                                        <!-- Rental Options (Initially Hidden) -->
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="residential_rental" required>
+                                            <div>
+                                                <span class="radio-option__label">🏠 Residential Rental</span>
+                                                <div class="radio-option__description">Houses, apartments, condos for rent</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="commercial_rental" required>
+                                            <div>
+                                                <span class="radio-option__label">🏢 Commercial Lease</span>
+                                                <div class="radio-option__description">Office, retail, industrial spaces</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="student_housing" required>
+                                            <div>
+                                                <span class="radio-option__label">🎓 Student Housing</span>
+                                                <div class="radio-option__description">Student residences, shared accommodations</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="short_term_rental" required>
+                                            <div>
+                                                <span class="radio-option__label">⏱️ Short-term Rental</span>
+                                                <div class="radio-option__description">Vacation rentals, furnished units</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="rent_to_own" required>
+                                            <div>
+                                                <span class="radio-option__label">🔄 Rent-to-Own</span>
+                                                <div class="radio-option__description">Lease with purchase option</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option rental-option" style="display: none;">
+                                            <input type="radio" name="property_type" value="mobile_home_rental" required>
+                                            <div>
+                                                <span class="radio-option__label">🏕️ Mobile Home Rental</span>
+                                                <div class="radio-option__description">Mobile home parks, trailers</div>
                                             </div>
                                         </label>
                                     </div>
@@ -1155,7 +1258,7 @@
                                             <input type="radio" name="client_type" value="individual" required>
                                             <div>
                                                 <span class="radio-option__label">Individual</span>
-                                                <div class="radio-option__description">Personal buyers/sellers</div>
+                                                <div class="radio-option__description">Personal buyers/sellers/tenants/landlords</div>
                                             </div>
                                         </label>
                                         <label class="radio-option">
@@ -1208,15 +1311,15 @@
                                         <label class="radio-option">
                                             <input type="radio" name="fund_handling" value="deposits_received" required>
                                             <div>
-                                                <span class="radio-option__label">Deposits Received by Brokerage</span>
-                                                <div class="radio-option__description">You will handle client funds</div>
+                                                <span class="radio-option__label">Deposits/Funds Received</span>
+                                                <div class="radio-option__description">You will handle client funds or deposits</div>
                                             </div>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="fund_handling" value="no_funds" required>
                                             <div>
                                                 <span class="radio-option__label">No Funds Handled</span>
-                                                <div class="radio-option__description">No deposit handling</div>
+                                                <div class="radio-option__description">No deposit or fund handling</div>
                                             </div>
                                         </label>
                                     </div>
@@ -1248,7 +1351,7 @@
                                         </label>
                                         <label class="checkbox-option">
                                             <input type="checkbox" name="transaction_details" value="first_time_buyer">
-                                            <span class="checkbox-option__label">First-time buyer</span>
+                                            <span class="checkbox-option__label">First-time buyer/tenant</span>
                                         </label>
                                         <label class="checkbox-option">
                                             <input type="checkbox" name="transaction_details" value="needs_financing">
@@ -1264,7 +1367,24 @@
                                         </label>
                                         <label class="checkbox-option">
                                             <input type="checkbox" name="transaction_details" value="older_home">
-                                            <span class="checkbox-option__label">Older home (40+ years)</span>
+                                            <span class="checkbox-option__label">Older property (40+ years)</span>
+                                        </label>
+                                        <!-- NEW: Rental-specific characteristics (Initially Hidden) -->
+                                        <label class="checkbox-option rental-characteristic" style="display: none;">
+                                            <input type="checkbox" name="transaction_details" value="rent_controlled">
+                                            <span class="checkbox-option__label">Rent Controlled Unit</span>
+                                        </label>
+                                        <label class="checkbox-option rental-characteristic" style="display: none;">
+                                            <input type="checkbox" name="transaction_details" value="utilities_included">
+                                            <span class="checkbox-option__label">Utilities Included</span>
+                                        </label>
+                                        <label class="checkbox-option rental-characteristic" style="display: none;">
+                                            <input type="checkbox" name="transaction_details" value="furnished">
+                                            <span class="checkbox-option__label">Furnished Rental</span>
+                                        </label>
+                                        <label class="checkbox-option rental-characteristic" style="display: none;">
+                                            <input type="checkbox" name="transaction_details" value="pet_friendly">
+                                            <span class="checkbox-option__label">Pet-Friendly</span>
                                         </label>
                                     </div>
                                 </div>
@@ -1285,7 +1405,7 @@
                 <!-- Property-Specific Forms -->
                 <div class="card">
                     <div class="card__header">
-                        <h2>Property-Specific OREA Forms</h2>
+                        <h2>Transaction-Specific Forms</h2>
                         <p class="text-secondary">Required forms specific to your transaction type.</p>
                     </div>
                     <div class="card__body">
@@ -1299,7 +1419,7 @@
                 <div class="card">
                     <div class="card__header">
                         <h2>Clause Recommendations with Copy-Ready Text</h2>
-                        <p class="text-secondary">Complete OREA clause text for your agreements.</p>
+                        <p class="text-secondary">Complete clause text for your agreements.</p>
                     </div>
                     <div class="card__body">
                         <div class="clauses-section">
@@ -1322,14 +1442,6 @@
                                 <div id="conditional-clauses" class="clauses-list">
                                     <!-- Conditional clauses will be populated here -->
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Clause Filtering Section -->
-                        <div class="clauses-section">
-                            <h2>Filtered Clauses</h2>
-                            <div id="clause-container" class="clauses-list">
-                                <!-- Filtered clauses will be dynamically inserted here -->
                             </div>
                         </div>
                     </div>
@@ -1373,12 +1485,12 @@
         <div class="container">
             <div class="footer__content">
                 <p class="footer__disclaimer">
-                    <strong>Disclaimer:</strong> This tool provides guidance based on current Ontario real estate regulations. 
-                    Always consult with qualified legal counsel and verify current requirements with RECO and OREA. 
-                    Professional judgment is required for all real estate transactions.
+                    <strong>Disclaimer:</strong> This tool provides guidance based on current Ontario real estate and rental regulations. 
+                    Always consult with qualified legal counsel and verify current requirements with RECO, OREA, and LTB. 
+                    Professional judgment is required for all real estate and rental transactions.
                 </p>
                 <p class="footer__copyright">
-                    Â© 2025 Ontario Real Estate Transaction Tool. For personal use only.
+                    © 2025 Ontario Real Estate & Rental Transaction Tool. For personal use only.
                 </p>
             </div>
         </div>
@@ -1395,14 +1507,16 @@
     </div>
 
     <script>
-        // COMPLETE WORKING JAVASCRIPT - MOBILE OPTIMIZED
+        // COMPLETE WORKING JAVASCRIPT WITH RENTAL CATEGORIES - MOBILE OPTIMIZED
         
         document.addEventListener('DOMContentLoaded', function() {
             initializeThemeToggle();
             setupFormHandlers();
             setupExportHandlers();
             displayUniversalMandatoryForms();
+            displayRentalUniversalForms();
             initializeMobileOptimizations();
+            setupTransactionTypeToggle();
         });
 
         function initializeMobileOptimizations() {
@@ -1442,6 +1556,60 @@
                     });
                 }
             }
+        }
+
+        function setupTransactionTypeToggle() {
+            const transactionTypeInputs = document.querySelectorAll('input[name="transaction_type"]');
+            const purchaseSaleOptions = document.querySelectorAll('.purchase-sale-option');
+            const rentalOptions = document.querySelectorAll('.rental-option');
+            const rentalCharacteristics = document.querySelectorAll('.rental-characteristic');
+
+            transactionTypeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    console.log('Transaction type changed to:', this.value); // Debug log
+                    
+                    if (this.value === 'purchase_sale') {
+                        // Show purchase/sale options
+                        purchaseSaleOptions.forEach(option => {
+                            option.style.display = 'flex';
+                            console.log('Showing purchase/sale option'); // Debug log
+                        });
+                        rentalOptions.forEach(option => {
+                            option.style.display = 'none';
+                            console.log('Hiding rental option'); // Debug log
+                        });
+                        rentalCharacteristics.forEach(char => char.style.display = 'none');
+                        
+                        // Clear rental selections
+                        rentalOptions.forEach(option => {
+                            const input = option.querySelector('input');
+                            if (input) input.checked = false;
+                        });
+                        rentalCharacteristics.forEach(char => {
+                            const input = char.querySelector('input');
+                            if (input) input.checked = false;
+                        });
+                        
+                    } else if (this.value === 'rental') {
+                        // Show rental options
+                        purchaseSaleOptions.forEach(option => {
+                            option.style.display = 'none';
+                            console.log('Hiding purchase/sale option'); // Debug log
+                        });
+                        rentalOptions.forEach(option => {
+                            option.style.display = 'flex';
+                            console.log('Showing rental option'); // Debug log
+                        });
+                        rentalCharacteristics.forEach(char => char.style.display = 'block');
+                        
+                        // Clear purchase/sale selections
+                        purchaseSaleOptions.forEach(option => {
+                            const input = option.querySelector('input');
+                            if (input) input.checked = false;
+                        });
+                    }
+                });
+            });
         }
 
         function initializeThemeToggle() {
@@ -1486,7 +1654,7 @@
             }
         }
 
-        // Universal Mandatory Forms Data
+        // Universal Mandatory Forms Data (Existing)
         const universalMandatoryForms = {
             "reco_information_guide": {
                 "form_name": "RECO Information Guide", 
@@ -1554,6 +1722,59 @@
             }
         };
 
+        // NEW: Rental Universal Mandatory Forms
+        const rentalUniversalMandatoryForms = {
+            "ontario_standard_lease": {
+                "form_name": "Ontario Standard Lease Agreement",
+                "form_number": "Ontario Form 2229E (2025)",
+                "purpose": "Mandatory lease form for most residential tenancies",
+                "when_required": "For all new residential leases (with few exceptions)",
+                "notes": "Must use government-approved form; landlord penalties for non-compliance",
+                "compliance": "RTA s.12.1 requirement"
+            },
+            "rental_application": {
+                "form_name": "Rental Application Form",
+                "form_number": "OREA Form 410",
+                "purpose": "Collects tenant information for rental approval",
+                "when_required": "Before lease signing for rental screening",
+                "notes": "Cannot request prohibited information under Human Rights Code",
+                "compliance": "RTA/Human Rights Code compliance"
+            },
+            "move_in_inspection": {
+                "form_name": "Move-in Condition Inspection Report",
+                "form_number": "LTB Form",
+                "purpose": "Documents property condition at start of tenancy",
+                "when_required": "Within 7 days of tenancy start",
+                "notes": "Protects both landlord and tenant regarding damages",
+                "compliance": "RTA s.35 requirement"
+            },
+            "rent_receipt": {
+                "form_name": "Rent Receipt Template",
+                "form_number": "RTA Compliant",
+                "purpose": "Provides written record of rent payments",
+                "when_required": "When tenant requests (must be provided free)",
+                "notes": "Must include specific information as per RTA",
+                "compliance": "RTA s.109 requirement"
+            },
+            "notice_forms": {
+                "form_name": "Landlord and Tenant Board Notice Forms",
+                "form_number": "LTB Forms N1-N15",
+                "purpose": "Official notices for rent increases, terminations, etc.",
+                "when_required": "For all formal notices between landlord/tenant",
+                "notes": "Must use exact LTB forms; improper notice is invalid",
+                "compliance": "RTA requirement"
+            },
+            "key_deposit_receipt": {
+                "form_name": "Key Deposit and Other Fees Receipt",
+                "form_number": "Custom Form",
+                "purpose": "Records refundable deposits and fees",
+                "when_required": "When collecting any deposits beyond last month's rent",
+                "notes": "Most deposits prohibited except last month rent and key deposits",
+                "compliance": "RTA s.134 compliance"
+            }
+        };
+
+        // Enhanced Transaction-Specific Forms (including rentals) - FIXED
         const transactionSpecificForms = {
             "residential_freehold": {
                 "primary": "OREA Form 100 - Agreement of Purchase and Sale",
@@ -1603,9 +1824,77 @@
                     "OREA Form 503 - Sale of Business Statement",
                     "OREA Form 504 - Schedule (Business Purchase)"
                 ]
+            },
+            // RENTAL FORMS - PROPERLY CONFIGURED
+            "residential_rental": {
+                "primary": "🏠 Ontario Standard Lease Agreement (Form 2229E)",
+                "additional": [
+                    "OREA Form 410 - Rental Application",
+                    "Move-in Condition Inspection Report",
+                    "Rent Receipt Template (RTA Compliant)",
+                    "LTB Notice Forms (N1-N15 as needed)",
+                    "Key Deposit Receipt Form",
+                    "Rental Property Information Statement"
+                ]
+            },
+            "commercial_rental": {
+                "primary": "🏢 OREA Form 510 - Agreement to Lease (Commercial)",
+                "additional": [
+                    "OREA Form 515 - Offer to Lease (Commercial)",
+                    "Commercial Lease Agreement (Full Term)",
+                    "Commercial Tenant Application Form",
+                    "Property Condition Report (Commercial)",
+                    "Insurance Requirements Schedule",
+                    "Operating Costs Addendum"
+                ]
+            },
+            "student_housing": {
+                "primary": "🎓 Ontario Standard Lease (Modified for Students)",
+                "additional": [
+                    "OREA Form 410 - Rental Application",
+                    "Student Housing Addendum",
+                    "Co-signer/Guarantor Agreement",
+                    "House Rules and Community Guidelines",
+                    "Move-in/Move-out Checklist",
+                    "Academic Year Lease Terms"
+                ]
+            },
+            "short_term_rental": {
+                "primary": "⏱️ Short-term Rental Agreement",
+                "additional": [
+                    "Guest Registration Form",
+                    "Municipal Licensing Documentation",
+                    "Property Rules and House Guidelines",
+                    "Security Deposit Agreement",
+                    "Check-in/Check-out Instructions",
+                    "Emergency Contact Information"
+                ]
+            },
+            "rent_to_own": {
+                "primary": "🔄 Rent-to-Own Agreement",
+                "additional": [
+                    "Option to Purchase Agreement",
+                    "OREA Form 410 - Rental Application", 
+                    "Property Appraisal Documentation",
+                    "Maintenance Responsibility Schedule",
+                    "Purchase Price Calculation Formula",
+                    "Credit Application and Terms"
+                ]
+            },
+            "mobile_home_rental": {
+                "primary": "🏕️ Mobile Home Tenancy Agreement",
+                "additional": [
+                    "Mobile Home Park Community Rules",
+                    "Lot Rental Agreement (if applicable)",
+                    "Utility Connection Agreements",
+                    "Site Maintenance Responsibilities",
+                    "Move-out/Restoration Requirements",
+                    "Park Management Contact Information"
+                ]
             }
         };
 
+        // Enhanced Clause Database (including rental clauses)
         const clauseDatabase = {
             "MORT-2": {
                 "name": "Condition - Arranging a New Mortgage",
@@ -1630,11 +1919,61 @@
                 "purpose": "Ensures buyer can obtain property insurance before closing",
                 "when_to_use": "All property purchases",
                 "risk_without": "Unable to insure or prohibitive costs"
+            },
+            // NEW: Rental-specific clauses
+            "RENT-1": {
+                "name": "Rent Increase Notice Clause",
+                "category": "Rental",
+                "text": "The Landlord may increase the rent for the rental unit in accordance with the Residential Tenancies Act. Any rent increase requires 90 days written notice on the prescribed form (Form N1). The rent increase cannot exceed the guideline amount set by the Ontario government unless the Landlord obtains approval from the Landlord and Tenant Board for an above-guideline increase. The first rent increase cannot take effect until 12 months after the tenancy begins or the date of the last rent increase.",
+                "purpose": "Ensures compliance with RTA rent increase requirements",
+                "when_to_use": "All residential lease agreements",
+                "risk_without": "Invalid rent increases, LTB disputes"
+            },
+            "RENT-2": {
+                "name": "Maintenance and Repair Responsibilities",
+                "category": "Rental",
+                "text": "The Landlord is responsible for maintaining the rental unit and residential complex in a good state of repair and fit for habitation and complying with health, safety, housing and maintenance standards. The Tenant is responsible for ordinary cleanliness of the rental unit and for repair of damage caused by the wilful or negligent conduct of the Tenant or guests. The Tenant shall promptly notify the Landlord of any defects or need for repairs.",
+                "purpose": "Clarifies maintenance responsibilities per RTA",
+                "when_to_use": "All residential lease agreements",
+                "risk_without": "Disputes over repair responsibilities"
+            },
+            "RENT-3": {
+                "name": "Entry and Access Rights",
+                "category": "Rental",
+                "text": "The Landlord may enter the rental unit only in accordance with the Residential Tenancies Act. Except in cases of emergency, the Landlord must give the Tenant at least 24 hours written notice of entry and may only enter between 8 a.m. and 8 p.m. The Tenant cannot unreasonably deny the Landlord access for inspections, repairs, or showings to prospective tenants or purchasers with proper notice.",
+                "purpose": "Establishes proper entry procedures per RTA",
+                "when_to_use": "All residential lease agreements",
+                "risk_without": "Illegal entry, privacy violations"
+            },
+            "RENT-4": {
+                "name": "Pet Policy Clause",
+                "category": "Rental",
+                "text": "No-pet clauses in residential leases are void under the Residential Tenancies Act. However, the Tenant agrees to be responsible for any damage caused by pets and to ensure pets do not disturb other tenants. The Landlord may apply to the Landlord and Tenant Board for termination of the tenancy if pets cause damage, disturb others, or are dangerous. Condominiums may have specific pet restrictions that apply.",
+                "purpose": "Clarifies pet rights and responsibilities under RTA",
+                "when_to_use": "When pet policies need clarification",
+                "risk_without": "Misunderstanding of pet rights"
+            },
+            "COMM-1": {
+                "name": "Commercial Lease - Use and Permitted Activities",
+                "category": "Commercial Rental",
+                "text": "The Tenant shall use the leased premises solely for the purpose of _________________ and for no other purpose without the prior written consent of the Landlord. The Tenant shall not use the premises for any illegal purpose or any purpose that would increase insurance premiums or void insurance coverage. The Tenant shall comply with all applicable laws, bylaws, and regulations governing the use of the premises.",
+                "purpose": "Restricts commercial use to approved activities",
+                "when_to_use": "All commercial lease agreements",
+                "risk_without": "Unauthorized use, insurance issues"
+            },
+            "COMM-2": {
+                "name": "Commercial Lease - Operating Costs and Additional Rent",
+                "category": "Commercial Rental", 
+                "text": "In addition to Base Rent, the Tenant shall pay Additional Rent consisting of the Tenant's proportionate share of operating costs including but not limited to: property taxes, insurance premiums, utilities, maintenance, repairs, management fees, and other expenses related to the operation of the building. The Tenant's proportionate share shall be ___% based on the leased area compared to the total leasable area.",
+                "purpose": "Allocates operating costs in commercial leases",
+                "when_to_use": "Commercial leases with cost-sharing",
+                "risk_without": "Unclear cost allocation, disputes"
             }
         };
 
         // Application State
         let currentTransaction = {
+            transactionType: null,
             propertyType: null,
             clientType: null,
             representationStatus: null,
@@ -1649,6 +1988,19 @@
             container.innerHTML = '';
             
             Object.entries(universalMandatoryForms).forEach(([formId, form]) => {
+                const formItem = createUniversalFormItem(form);
+                container.appendChild(formItem);
+            });
+        }
+
+        // Display Rental Universal Forms
+        function displayRentalUniversalForms() {
+            const container = document.getElementById('rental-universal-forms-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            Object.entries(rentalUniversalMandatoryForms).forEach(([formId, form]) => {
                 const formItem = createUniversalFormItem(form);
                 container.appendChild(formItem);
             });
@@ -1695,6 +2047,11 @@
                         resultsSection.style.display = 'none';
                     }
                     resetTransactionState();
+                    
+                    // Reset property type options visibility
+                    document.querySelectorAll('.purchase-sale-option').forEach(option => option.style.display = 'flex');
+                    document.querySelectorAll('.rental-option').forEach(option => option.style.display = 'none');
+                    document.querySelectorAll('.rental-characteristic').forEach(char => char.style.display = 'none');
                 });
             }
         }
@@ -1704,10 +2061,13 @@
             const formData = new FormData(document.getElementById('transaction-form'));
             
             // Update transaction state
+            currentTransaction.transactionType = formData.get('transaction_type');
             currentTransaction.propertyType = formData.get('property_type');
             currentTransaction.clientType = formData.get('client_type');
             currentTransaction.representationStatus = formData.get('representation_status');
             currentTransaction.fundHandling = formData.get('fund_handling');
+            
+            console.log('Form submitted with:', currentTransaction); // Debug log
             
             // Generate and display results
             generateTransactionResults();
@@ -1730,20 +2090,29 @@
 
         // Generate Transaction Results
         function generateTransactionResults() {
+            console.log('Generating results for:', currentTransaction); // Debug log
             generatePropertySpecificForms();
             generateClauseRecommendations();
             generateComplianceChecklist();
         }
 
-        // Generate Property Specific Forms
+        // Generate Property Specific Forms - FIXED FOR RENTALS
         function generatePropertySpecificForms() {
             const container = document.getElementById('property-forms-list');
-            if (!container || !currentTransaction.propertyType) return;
+            if (!container || !currentTransaction.propertyType) {
+                console.log('No container or property type:', currentTransaction.propertyType);
+                return;
+            }
             
             container.innerHTML = '';
             
             const forms = transactionSpecificForms[currentTransaction.propertyType];
-            if (!forms) return;
+            console.log('Forms for property type:', currentTransaction.propertyType, forms); // Debug log
+            
+            if (!forms) {
+                console.log('No forms found for property type:', currentTransaction.propertyType);
+                return;
+            }
             
             // Primary form
             const primarySection = document.createElement('div');
@@ -1768,6 +2137,8 @@
                 `;
                 container.appendChild(additionalSection);
             }
+            
+            console.log('Forms generated successfully'); // Debug log
         }
 
         // Generate Clause Recommendations
@@ -1781,9 +2152,22 @@
             mandatoryContainer.innerHTML = '';
             recommendedContainer.innerHTML = '';
             
-            // Add clauses
-            const mandatoryClauses = ['INSUR-1'];
-            const recommendedClauses = ['INSP-1', 'MORT-2'];
+            // Select clauses based on transaction type
+            let mandatoryClauses = [];
+            let recommendedClauses = [];
+            
+            if (currentTransaction.transactionType === 'rental') {
+                mandatoryClauses = ['RENT-1', 'RENT-2'];
+                recommendedClauses = ['RENT-3', 'RENT-4'];
+                
+                if (currentTransaction.propertyType === 'commercial_rental') {
+                    mandatoryClauses.push('COMM-1');
+                    recommendedClauses.push('COMM-2');
+                }
+            } else {
+                mandatoryClauses = ['INSUR-1'];
+                recommendedClauses = ['INSP-1', 'MORT-2'];
+            }
             
             mandatoryClauses.forEach(clauseId => {
                 if (clauseDatabase[clauseId]) {
@@ -1836,17 +2220,37 @@
             
             container.innerHTML = '';
             
-            const checklistItems = [
+            let checklistItems = [
                 'RECO Information Guide provided and explained',
                 'Privacy policy disclosed (PIPEDA compliance)',
                 'Client identity verified (FINTRAC requirements)',
                 'Representation agreement signed',
-                'All mandatory disclosures completed',
-                'Property-specific forms identified and prepared',
-                'Required clauses included in agreement',
-                'All conditions properly dated and timed',
-                'Compliance with regulatory requirements verified'
+                'All mandatory disclosures completed'
             ];
+
+            // Add rental-specific checklist items
+            if (currentTransaction.transactionType === 'rental') {
+                checklistItems = [
+                    ...checklistItems,
+                    'Ontario Standard Lease form used (if residential)',
+                    'Rental application form completed (OREA Form 410)',
+                    'Move-in condition inspection scheduled',
+                    'Rent receipt template provided to tenant',
+                    'LTB notice forms available for landlord',
+                    'RTA compliance verified (maintenance, entry rights, etc.)',
+                    'Municipal licensing requirements checked',
+                    'Insurance requirements confirmed'
+                ];
+            } else {
+                checklistItems = [
+                    ...checklistItems,
+                    'Property-specific forms identified and prepared',
+                    'Required clauses included in agreement',
+                    'All conditions properly dated and timed'
+                ];
+            }
+            
+            checklistItems.push('Compliance with regulatory requirements verified');
             
             checklistItems.forEach((item, index) => {
                 const checklistItem = document.createElement('div');
@@ -1904,7 +2308,8 @@
                 allClauses.push(`${index + 1}. ${clauseName} (${clauseReference})\n\n${textarea.value}`);
             });
             
-            const allText = `ONTARIO REAL ESTATE CLAUSES - TRANSACTION PACKAGE\n${'='.repeat(60)}\n\n${allClauses.join('\n\n' + '-'.repeat(60) + '\n\n')}`;
+            const transactionTypeLabel = currentTransaction.transactionType === 'rental' ? 'RENTAL' : 'PURCHASE/SALE';
+            const allText = `ONTARIO ${transactionTypeLabel} CLAUSES - TRANSACTION PACKAGE\n${'='.repeat(60)}\n\n${allClauses.join('\n\n' + '-'.repeat(60) + '\n\n')}`;
             
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(allText).then(() => {
@@ -1925,10 +2330,11 @@
             const currentDate = new Date().toLocaleDateString('en-CA');
             
             const summary = `
-ONTARIO REAL ESTATE TRANSACTION SUMMARY
+ONTARIO REAL ESTATE & RENTAL TRANSACTION SUMMARY
 ${'='.repeat(60)}
 
 Generated: ${currentDate}
+Transaction Type: ${currentTransaction.transactionType || 'Not specified'}
 Property Type: ${currentTransaction.propertyType || 'Not specified'}
 Client Type: ${currentTransaction.clientType || 'Not specified'}
 Representation: ${currentTransaction.representationStatus || 'Not specified'}
@@ -1937,13 +2343,19 @@ Fund Handling: ${currentTransaction.fundHandling || 'Not specified'}
 UNIVERSAL MANDATORY FORMS:
 ${Object.values(universalMandatoryForms).map((form, index) => `${index + 1}. ${form.form_name}`).join('\n')}
 
-COMPLIANCE REQUIREMENTS:
-âœ“ RECO/TRESA Requirements
-âœ“ FINTRAC Compliance
-âœ“ PIPEDA Compliance
-âœ“ OREA Standards
+${currentTransaction.transactionType === 'rental' ? `
+RENTAL UNIVERSAL MANDATORY FORMS:
+${Object.values(rentalUniversalMandatoryForms).map((form, index) => `${index + 1}. ${form.form_name}`).join('\n')}
+` : ''}
 
-Generated by Ontario Real Estate Transaction Tool
+COMPLIANCE REQUIREMENTS:
+✓ RECO/TRESA Requirements
+✓ FINTRAC Compliance
+✓ PIPEDA Compliance
+✓ OREA Standards
+${currentTransaction.transactionType === 'rental' ? '✓ RTA Compliance\n✓ LTB Requirements' : ''}
+
+Generated by Ontario Real Estate & Rental Transaction Tool
 Personal Use Only
             `;
             
@@ -1968,11 +2380,20 @@ Personal Use Only
 
         // Export Form List
         function exportFormList() {
-            const formsList = Object.values(universalMandatoryForms).map((form, index) => 
+            const universalFormsList = Object.values(universalMandatoryForms).map((form, index) => 
                 `${index + 1}. ${form.form_name} - ${form.form_number}`
             );
             
-            const formsText = `ONTARIO REAL ESTATE FORMS LIST\n${'='.repeat(40)}\n\n${formsList.join('\n')}`;
+            const rentalFormsList = currentTransaction.transactionType === 'rental' ? 
+                Object.values(rentalUniversalMandatoryForms).map((form, index) => 
+                    `${index + 1}. ${form.form_name} - ${form.form_number}`
+                ) : [];
+            
+            let formsText = `ONTARIO REAL ESTATE FORMS LIST\n${'='.repeat(40)}\n\nUNIVERSAL FORMS:\n${universalFormsList.join('\n')}`;
+            
+            if (rentalFormsList.length > 0) {
+                formsText += `\n\nRENTAL FORMS:\n${rentalFormsList.join('\n')}`;
+            }
             
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(formsText).then(() => {
@@ -2000,6 +2421,11 @@ Personal Use Only
                 resultsSection.style.display = 'none';
             }
             
+            // Reset property type options visibility
+            document.querySelectorAll('.purchase-sale-option').forEach(option => option.style.display = 'flex');
+            document.querySelectorAll('.rental-option').forEach(option => option.style.display = 'none');
+            document.querySelectorAll('.rental-characteristic').forEach(char => char.style.display = 'none');
+            
             resetTransactionState();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
@@ -2012,6 +2438,7 @@ Personal Use Only
         // Reset Transaction State
         function resetTransactionState() {
             currentTransaction = {
+                transactionType: null,
                 propertyType: null,
                 clientType: null,
                 representationStatus: null,
