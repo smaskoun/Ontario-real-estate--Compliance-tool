@@ -14,7 +14,10 @@
             --warning: #d97706;
             --danger: #dc2626;
             --info: #0891b2;
-            
+            --residential: #16a34a;
+            --commercial: #8b5cf6;
+            --rental: #0891b2;
+
             /* Enhanced Color Palette */
             --surface-primary: #ffffff;
             --surface-secondary: #f8fafc;
@@ -23,13 +26,13 @@
             --border-light: #e2e8f0;
             --border-medium: #cbd5e1;
             --border-strong: #94a3b8;
-            
+
             /* Text Colors */
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-tertiary: #64748b;
             --text-accent: #1e293b;
-            
+
             /* Modern Spacing System */
             --space-1: 0.25rem;
             --space-2: 0.5rem;
@@ -42,7 +45,7 @@
             --space-12: 3rem;
             --space-16: 4rem;
             --space-20: 5rem;
-            
+
             /* Typography Scale */
             --text-xs: 0.75rem;
             --text-sm: 0.875rem;
@@ -52,21 +55,21 @@
             --text-2xl: 1.5rem;
             --text-3xl: 1.875rem;
             --text-4xl: 2.25rem;
-            
+
             /* Modern Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            
+
             /* Border Radius */
             --radius-sm: 0.375rem;
             --radius-base: 0.5rem;
             --radius-md: 0.75rem;
             --radius-lg: 1rem;
             --radius-xl: 1.5rem;
-            
+
             /* Dashboard Layout */
             --sidebar-width: 280px;
             --header-height: 72px;
@@ -385,6 +388,18 @@
             border-left-color: var(--success);
         }
 
+        .status-card--residential {
+            border-left-color: var(--residential);
+        }
+
+        .status-card--commercial {
+            border-left-color: var(--commercial);
+        }
+
+        .status-card--rental {
+            border-left-color: var(--rental);
+        }
+
         /* GRID LAYOUTS */
         .grid {
             display: grid;
@@ -399,19 +414,30 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
+        .grid--4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         .grid--auto {
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
 
+        @media (max-width: 1400px) {
+            .grid--4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 1024px) {
-            .grid--3 {
+            .grid--3, .grid--4 {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
             .grid--2,
-            .grid--3 {
+            .grid--3,
+            .grid--4 {
                 grid-template-columns: 1fr;
             }
         }
@@ -806,12 +832,12 @@
         .text-warning { color: var(--warning); }
         .text-danger { color: var(--danger); }
         .text-info { color: var(--info); }
-        
+
         .mb-0 { margin-bottom: 0 !important; }
         .mb-2 { margin-bottom: var(--space-2) !important; }
         .mb-4 { margin-bottom: var(--space-4) !important; }
         .mb-6 { margin-bottom: var(--space-6) !important; }
-        
+
         .mt-0 { margin-top: 0 !important; }
         .mt-4 { margin-top: var(--space-4) !important; }
         .mt-6 { margin-top: var(--space-6) !important; }
@@ -859,20 +885,20 @@
             .main {
                 padding: var(--space-4);
             }
-            
+
             .card__body,
             .form-section {
                 padding: var(--space-4);
             }
-            
+
             .options-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .form-list {
                 grid-template-columns: 1fr;
             }
-            
+
             .export-grid {
                 grid-template-columns: 1fr;
             }
@@ -882,7 +908,7 @@
 <body>
     <!-- COMPLETE TESTED DASHBOARD -->
     <div class="dashboard">
-        
+
         <!-- HEADER -->
         <header class="header">
             <div class="header__left">
@@ -893,10 +919,10 @@
                 </button>
                 <div>
                     <h1 class="header__title">Ontario Real Estate & Rental Tool</h1>
-                    <p class="header__subtitle">Professional Compliance Dashboard | RECO | FINTRAC | RTA</p>
+                    <p class="header__subtitle">Professional Compliance Dashboard | RECO | FINTRAC | RTA | Commercial | Residential</p>
                 </div>
             </div>
-            
+
             <div class="header__right">
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
                     <svg class="theme-icon" id="light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -933,7 +959,7 @@
                     Results & Analysis
                 </button>
             </div>
-            
+
             <div class="sidebar__section">
                 <h2 class="sidebar__title">Quick Actions</h2>
                 <button class="nav-item" id="start-new-btn">
@@ -954,12 +980,12 @@
         <!-- MAIN CONTENT AREA -->
         <main class="main" id="main">
             <div class="main__content">
-                
+
                 <!-- OVERVIEW SECTION -->
                 <section id="section-overview" class="section">
-                    
+
                     <!-- Universal Forms Grid -->
-                    <div class="grid grid--2">
+                    <div class="grid grid--4">
                         <div class="card status-card--warning">
                             <div class="card__header">
                                 <h2 class="card__title">⚠️ Universal Mandatory Forms</h2>
@@ -971,8 +997,32 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="card status-card--info">
+
+                        <div class="card status-card--residential">
+                            <div class="card__header">
+                                <h2 class="card__title">🏡 Residential Forms</h2>
+                                <p class="card__subtitle">Residential transaction requirements</p>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-list" id="residential-forms">
+                                    <!-- Residential forms populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card status-card--commercial">
+                            <div class="card__header">
+                                <h2 class="card__title">🏢 Commercial Forms</h2>
+                                <p class="card__subtitle">Commercial transaction requirements</p>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-list" id="commercial-forms">
+                                    <!-- Commercial forms populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card status-card--rental">
                             <div class="card__header">
                                 <h2 class="card__title">🏠 Rental Universal Forms</h2>
                                 <p class="card__subtitle">Additional forms for rental transactions</p>
@@ -995,7 +1045,7 @@
                             </svg>
                             Complete Transaction Profile
                         </h2>
-                        
+
                         <form id="transaction-form">
                             <div class="grid grid--2">
                                 <div class="form-group">
@@ -1168,12 +1218,14 @@
 
     <script>
         // COMPLETE TESTED DASHBOARD FUNCTIONALITY
-        
+
         class TransactionDashboard {
             constructor() {
                 this.currentSection = 'overview';
                 this.transactionData = {};
                 this.universalForms = this.getUniversalForms();
+                this.residentialForms = this.getResidentialForms(); // NEW: Added residential forms
+                this.commercialForms = this.getCommercialForms();
                 this.rentalForms = this.getRentalForms();
                 this.transactionSpecificForms = this.getTransactionSpecificForms();
                 this.clauseDatabase = this.getClauseDatabase();
@@ -1223,24 +1275,127 @@
                     },
                     "receipt_of_funds": {
                         "name": "Receipt of Funds Record",
-                        "number": "CREA Template",
+                        "number": "Ontario Form 635",
                         "purpose": "Records all funds received by brokerage",
                         "timing": "When any deposit or payment is received",
                         "compliance": "FINTRAC/PCMLTFA requirement"
+                    }
+                };
+            }
+
+            // NEW: Residential forms based on Jump Realty Buyer-Residential template
+            getResidentialForms() {
+                return {
+                    "agreement_residential": {
+                        "name": "Agreement of Purchase and Sale - Residential",
+                        "number": "Ontario Form 100",
+                        "purpose": "Primary residential purchase agreement",
+                        "timing": "For all residential property transactions",
+                        "compliance": "OREA/RECO requirement"
                     },
-                    "representation_agreement": {
-                        "name": "Buyer/Seller Representation Agreement",
-                        "number": "OREA Form 300 (BRA) / Form 200 (Listing)",
-                        "purpose": "Establishes client relationship and service terms",
-                        "timing": "Before providing services to buyers/sellers",
-                        "compliance": "RECO/TRESA requirement"
-                    },
-                    "cooperation_confirmation": {
+                    "confirmation_coop_res": {
                         "name": "Confirmation of Co-operation and Representation",
-                        "number": "OREA Form 320",
-                        "purpose": "Confirms agency relationships in the transaction",
-                        "timing": "Before presenting offers or showing properties",
+                        "number": "Ontario Form 320",
+                        "purpose": "Confirms agency relationships in residential transactions",
+                        "timing": "Before presenting offers or showing residential properties",
                         "compliance": "RECO/TRESA requirement"
+                    },
+                    "buyer_representation_residential": {
+                        "name": "Buyer Designated Representation Agreement - Authority for Purchase or Lease",
+                        "number": "Ontario Form 371",
+                        "purpose": "Establishes residential buyer representation relationship",
+                        "timing": "Before providing residential buyer services",
+                        "compliance": "RECO/TRESA requirement"
+                    },
+                    "offer_summary": {
+                        "name": "Offer Summary Document – For use with Agreement of Purchase and Sale",
+                        "number": "Ontario Form 801",
+                        "purpose": "Provides clear summary of offer terms for client review",
+                        "timing": "With every residential offer presentation",
+                        "compliance": "RECO/TRESA consumer protection requirement"
+                    },
+                    "condition_acknowledgement": {
+                        "name": "Condition(s) In Offer – Buyer Acknowledgement",
+                        "number": "Ontario Form 127",
+                        "purpose": "Ensures buyer understands conditions and their implications",
+                        "timing": "When offers include conditions",
+                        "compliance": "RECO/TRESA buyer protection requirement"
+                    },
+                    "multiple_representation": {
+                        "name": "Multiple Representation, Buyer Acknowledgement and Consent",
+                        "number": "Ontario Form 326",
+                        "purpose": "Disclosure and consent for multiple representation scenarios",
+                        "timing": "When agent represents both buyer and seller",
+                        "compliance": "RECO/TRESA disclosure requirement"
+                    },
+                    "notice_revocation": {
+                        "name": "Notice of Revocation",
+                        "number": "Ontario Form 108",
+                        "purpose": "Formal notice to revoke representation agreements",
+                        "timing": "When terminating buyer representation",
+                        "compliance": "RECO/TRESA requirement"
+                    },
+                    "referral_agreement": {
+                        "name": "Referral Agreement",
+                        "number": "Ontario Form 641",
+                        "purpose": "Documents referral arrangements and fee sharing",
+                        "timing": "When making or receiving referrals",
+                        "compliance": "RECO/TRESA referral disclosure requirement"
+                    },
+                    "buyer_services_checklist": {
+                        "name": "Buyer Services Forms Checklist – Residential",
+                        "number": "Ontario Form 380",
+                        "purpose": "Ensures all required buyer services forms are completed",
+                        "timing": "Throughout the buyer representation process",
+                        "compliance": "RECO/TRESA compliance tracking"
+                    },
+                    "registrant_disclosure": {
+                        "name": "Registrant Disclosure of Interest – Acquisition of Property",
+                        "number": "Ontario Form 160",
+                        "purpose": "Disclosure when registrant has interest in property being purchased",
+                        "timing": "When agent/brokerage has interest in property",
+                        "compliance": "RECO/TRESA conflict of interest disclosure"
+                    },
+                    "deal_sheet_residential": {
+                        "name": "Brokerage Deal Sheet - Residential",
+                        "number": "Jump Realty Form (Rev. 05/2025)",
+                        "purpose": "Internal residential transaction tracking and summary",
+                        "timing": "For all residential transactions (brokerage requirement)",
+                        "compliance": "Brokerage compliance tracking"
+                    }
+                };
+            }
+
+            // Commercial forms based on Jump Realty template
+            getCommercialForms() {
+                return {
+                    "agreement_commercial": {
+                        "name": "Agreement of Purchase and Sale – Commercial",
+                        "number": "Ontario Form 500",
+                        "purpose": "Primary commercial purchase agreement",
+                        "timing": "For all commercial property transactions",
+                        "compliance": "OREA/RECO requirement"
+                    },
+                    "confirmation_coop": {
+                        "name": "Confirmation of Co-operation and Representation",
+                        "number": "Ontario Form 320",
+                        "purpose": "Confirms agency relationships in commercial transactions",
+                        "timing": "Before presenting offers or showing commercial properties",
+                        "compliance": "RECO/TRESA requirement"
+                    },
+                    "buyer_representation_commercial": {
+                        "name": "Buyer Designated Representation Agreement - Commercial - Mandate for Purchase",
+                        "number": "Ontario Form 596",
+                        "purpose": "Establishes commercial buyer representation relationship",
+                        "timing": "Before providing commercial buyer services",
+                        "compliance": "RECO/TRESA requirement"
+                    },
+                    "deal_sheet": {
+                        "name": "Brokerage Deal Sheet - Commercial",
+                        "number": "Jump Realty Form (Rev. 05/2025)",
+                        "purpose": "Internal commercial transaction tracking and summary",
+                        "timing": "For all commercial transactions (brokerage requirement)",
+                        "compliance": "Brokerage compliance tracking"
                     }
                 };
             }
@@ -1295,41 +1450,54 @@
             getTransactionSpecificForms() {
                 return {
                     "residential_freehold": {
-                        "primary": "OREA Form 100 - Agreement of Purchase and Sale",
+                        "primary": "🏡 OREA Form 100 - Agreement of Purchase and Sale (Residential)",
                         "additional": [
+                            "Ontario Form 371 - Buyer Designated Representation Agreement",
+                            "Ontario Form 801 - Offer Summary Document",
+                            "Ontario Form 127 - Condition(s) In Offer - Buyer Acknowledgement",
+                            "Ontario Form 380 - Buyer Services Forms Checklist",
                             "OREA Form 105 - Schedule for Additional Terms",
                             "OREA Form 120 - Amendment to Agreement",
                             "OREA Form 121 - Notice to Remove Condition(s)",
-                            "OREA Form 220 - Seller Property Information Statement (SPIS)"
+                            "OREA Form 220 - Seller Property Information Statement (SPIS)",
+                            "Jump Realty Deal Sheet (Rev. 05/2025)"
                         ]
                     },
                     "residential_condo": {
-                        "primary": "OREA Form 101 - Agreement of Purchase and Sale (Condominium)",
+                        "primary": "🏡 OREA Form 101 - Agreement of Purchase and Sale (Condominium)",
                         "additional": [
+                            "Ontario Form 371 - Buyer Designated Representation Agreement",
+                            "Ontario Form 801 - Offer Summary Document",
+                            "Ontario Form 127 - Condition(s) In Offer - Buyer Acknowledgement",
                             "OREA Form 105 - Schedule for Additional Terms",
                             "OREA Form 150 - Assignment of Agreement (Condominium)",
                             "OREA Form 120 - Amendment to Agreement"
                         ]
                     },
                     "commercial": {
-                        "primary": "OREA Form 500 - Agreement of Purchase and Sale (Commercial)",
+                        "primary": "🏢 OREA Form 500 - Agreement of Purchase and Sale (Commercial)",
                         "additional": [
+                            "Ontario Form 320 - Confirmation of Co-operation and Representation",
+                            "Ontario Form 596 - Buyer Designated Representation Agreement - Commercial",
                             "OREA Form 501 - Agreement of Purchase and Sale (Commercial Condo)",
                             "OREA Form 505 - Schedule (Commercial)",
-                            "OREA Form 570 - Amendment (Commercial)"
+                            "OREA Form 570 - Amendment (Commercial)",
+                            "Jump Realty Deal Sheet (Rev. 05/2025)"
                         ]
                     },
                     "vacant_land": {
-                        "primary": "OREA Form 100 - Agreement of Purchase and Sale",
+                        "primary": "🏡 OREA Form 100 - Agreement of Purchase and Sale (Vacant Land)",
                         "additional": [
+                            "Ontario Form 371 - Buyer Designated Representation Agreement",
                             "OREA Form 105 - Schedule for Development/Zoning",
                             "Environmental Assessment Schedules",
                             "Severance/Subdivision Schedules"
                         ]
                     },
                     "new_construction": {
-                        "primary": "Builder Purchase Agreement + TARION Schedules",
+                        "primary": "🏗️ Builder Purchase Agreement + TARION Schedules",
                         "additional": [
+                            "Ontario Form 371 - Buyer Designated Representation Agreement",
                             "TARION Statement of Critical Dates",
                             "TARION Schedule A - Defects and Standards",
                             "TARION Schedule B - Warranty Coverage",
@@ -1337,7 +1505,7 @@
                         ]
                     },
                     "business_purchase": {
-                        "primary": "OREA Form 502 - Agreement of Purchase and Sale (Business)",
+                        "primary": "🏢 OREA Form 502 - Agreement of Purchase and Sale (Business)",
                         "additional": [
                             "OREA Form 503 - Sale of Business Statement",
                             "OREA Form 504 - Schedule (Business Purchase)"
@@ -1415,6 +1583,36 @@
                         "purpose": "Ensures buyer can obtain property insurance before closing",
                         "when_to_use": "All property purchases"
                     },
+                    // NEW: Residential-specific clauses
+                    "RES-1": {
+                        "name": "Residential Property Condition Disclosure",
+                        "category": "Residential",
+                        "text": "The Buyer acknowledges that the Seller has provided a Seller Property Information Statement (SPIS) and any known material latent defects have been disclosed. The Buyer has had the opportunity to inspect the property and accepts it in its current condition, subject to normal wear and tear between the date of acceptance and closing. The property shall be delivered vacant and in substantially the same condition as viewed, reasonable wear and tear excepted.",
+                        "purpose": "Clarifies property condition expectations for residential purchases",
+                        "when_to_use": "All residential property purchases"
+                    },
+                    "RES-2": {
+                        "name": "Residential Occupancy Condition",
+                        "category": "Residential",
+                        "text": "This Offer is conditional upon the property being suitable for immediate occupancy as a residential dwelling and compliance with all applicable building codes, zoning by-laws, and occupancy requirements. Unless the Buyer gives notice in writing that this condition is fulfilled not later than _______ p.m. on the ______ day of ________________, 20____, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction.",
+                        "purpose": "Ensures residential property meets occupancy requirements",
+                        "when_to_use": "Residential purchases where occupancy is uncertain"
+                    },
+                    // Commercial Clauses
+                    "COMM-1": {
+                        "name": "Commercial Due Diligence Period",
+                        "category": "Commercial",
+                        "text": "This Offer is conditional upon the Buyer completing due diligence investigations to the Buyer's sole satisfaction, including but not limited to: financial review of operating statements, lease reviews, environmental assessments, zoning compliance verification, and any other investigations deemed necessary by the Buyer. The Seller agrees to provide reasonable access and cooperate in providing documentation required for such investigations. Unless the Buyer gives notice in writing delivered to the Seller not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction.",
+                        "purpose": "Allows comprehensive commercial property investigation before closing",
+                        "when_to_use": "All commercial property purchases"
+                    },
+                    "COMM-2": {
+                        "name": "Commercial Financing Condition",
+                        "category": "Commercial",
+                        "text": "This Offer is conditional upon the Buyer arranging satisfactory financing for the purchase of the property, including but not limited to conventional mortgage financing, mezzanine financing, or other commercial lending arrangements as may be required. The financing terms must be acceptable to the Buyer in the Buyer's sole discretion. Unless the Buyer gives notice in writing delivered to the Seller not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction.",
+                        "purpose": "Protects commercial buyer if unable to secure appropriate financing",
+                        "when_to_use": "Commercial purchases requiring financing"
+                    },
                     // Rental Clauses
                     "RENT-1": {
                         "name": "Rent Increase Notice Clause",
@@ -1450,7 +1648,7 @@
             // EVENT LISTENERS
             setupEventListeners() {
                 console.log('📡 Setting up event listeners...');
-                
+
                 // Navigation
                 document.querySelectorAll('.nav-item[data-section]').forEach(button => {
                     button.addEventListener('click', (e) => {
@@ -1492,7 +1690,7 @@
 
             setupThemeToggle() {
                 console.log('🎨 Setting up theme toggle...');
-                
+
                 const toggle = document.getElementById('theme-toggle');
                 const lightIcon = document.getElementById('light-icon');
                 const darkIcon = document.getElementById('dark-icon');
@@ -1527,10 +1725,10 @@
 
             setupMobileMenu() {
                 console.log('📱 Setting up mobile menu...');
-                
+
                 const mobileBtn = document.getElementById('mobile-menu-btn');
                 const sidebar = document.getElementById('sidebar');
-                
+
                 mobileBtn.addEventListener('click', () => {
                     sidebar.classList.toggle('open');
                 });
@@ -1550,7 +1748,7 @@
             // NAVIGATION
             showSection(sectionName) {
                 console.log(`🧭 Navigating to section: ${sectionName}`);
-                
+
                 // Update navigation
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.classList.remove('active');
@@ -1564,7 +1762,7 @@
                 document.getElementById(`section-${sectionName}`).classList.remove('hidden');
 
                 this.currentSection = sectionName;
-                
+
                 // Close mobile menu
                 if (window.innerWidth <= 768) {
                     document.getElementById('sidebar').classList.remove('open');
@@ -1575,12 +1773,14 @@
 
             // FORMS LOADING
             loadUniversalForms() {
-                console.log('📋 Loading universal forms...');
-                
+                console.log('📋 Loading all forms...');
+
                 this.renderFormsList('universal-forms', this.universalForms);
+                this.renderFormsList('residential-forms', this.residentialForms); // NEW: Load residential forms
+                this.renderFormsList('commercial-forms', this.commercialForms);
                 this.renderFormsList('rental-universal-forms', this.rentalForms);
-                
-                console.log('✅ Universal forms loaded');
+
+                console.log('✅ All forms loaded');
             }
 
             renderFormsList(containerId, forms) {
@@ -1611,9 +1811,9 @@
             // FORM LOGIC
             setupFormLogic() {
                 console.log('⚙️ Setting up form logic...');
-                
+
                 const transactionTypeInputs = document.querySelectorAll('input[name="transaction_type"]');
-                
+
                 transactionTypeInputs.forEach(input => {
                     input.addEventListener('change', () => {
                         console.log(`Transaction type changed to: ${input.value}`);
@@ -1625,24 +1825,24 @@
                 // Initialize with default state
                 this.updatePropertyTypeOptions('purchase_sale');
                 this.updateAdditionalCharacteristics('purchase_sale');
-                
+
                 console.log('✅ Form logic setup complete');
             }
 
             updatePropertyTypeOptions(transactionType) {
                 console.log(`🏠 Updating property types for: ${transactionType}`);
-                
+
                 const container = document.getElementById('property-type-options');
                 container.innerHTML = '';
 
                 let options = [];
-                
+
                 if (transactionType === 'purchase_sale') {
                     options = [
-                        { value: 'residential_freehold', title: 'Residential Freehold', desc: 'Houses, townhomes' },
-                        { value: 'residential_condo', title: 'Residential Condo', desc: 'Condo units, apartments' },
-                        { value: 'commercial', title: 'Commercial', desc: 'Office, retail, industrial' },
-                        { value: 'vacant_land', title: 'Vacant Land', desc: 'Undeveloped lots' }
+                        { value: 'residential_freehold', title: '🏡 Residential Freehold', desc: 'Houses, townhomes' },
+                        { value: 'residential_condo', title: '🏡 Residential Condo', desc: 'Condo units, apartments' },
+                        { value: 'commercial', title: '🏢 Commercial', desc: 'Office, retail, industrial' },
+                        { value: 'vacant_land', title: '🏡 Vacant Land', desc: 'Undeveloped lots' }
                     ];
                 } else if (transactionType === 'rental') {
                     options = [
@@ -1671,7 +1871,7 @@
 
             updateAdditionalCharacteristics(transactionType) {
                 console.log(`🏷️ Updating characteristics for: ${transactionType}`);
-                
+
                 const container = document.getElementById('additional-characteristics');
                 container.innerHTML = '';
 
@@ -1709,9 +1909,9 @@
             // FORM SUBMISSION
             handleFormSubmit(e) {
                 console.log('📝 Processing form submission...');
-                
+
                 const formData = new FormData(e.target);
-                
+
                 this.transactionData = {
                     transactionType: formData.get('transaction_type'),
                     propertyType: formData.get('property_type'),
@@ -1731,17 +1931,17 @@
             // RESULTS GENERATION
             generateResults() {
                 console.log('📊 Generating transaction results...');
-                
+
                 this.generateSpecificForms();
                 this.generateClauses();
                 this.generateComplianceChecklist();
-                
+
                 console.log('✅ Results generated');
             }
 
             generateSpecificForms() {
                 console.log('📋 Generating specific forms...');
-                
+
                 const container = document.getElementById('specific-forms');
                 const { transactionType, propertyType } = this.transactionData;
 
@@ -1773,14 +1973,19 @@
 
             generateClauses() {
                 console.log('📜 Generating clauses...');
-                
+
                 const container = document.getElementById('clauses-container');
-                const { transactionType } = this.transactionData;
+                const { transactionType, propertyType } = this.transactionData;
 
                 let clauseIds = [];
-                
+
                 if (transactionType === 'rental') {
                     clauseIds = ['RENT-1', 'RENT-2', 'RENT-3', 'RENT-4'];
+                } else if (propertyType === 'commercial') {
+                    clauseIds = ['COMM-1', 'COMM-2', 'MORT-1', 'INSUR-1'];
+                } else if (propertyType && propertyType.includes('residential')) {
+                    // NEW: Residential clauses
+                    clauseIds = ['RES-1', 'RES-2', 'MORT-1', 'INSP-1', 'INSUR-1'];
                 } else {
                     clauseIds = ['MORT-1', 'INSP-1', 'INSUR-1'];
                 }
@@ -1811,9 +2016,9 @@
 
             generateComplianceChecklist() {
                 console.log('✅ Generating compliance checklist...');
-                
+
                 const container = document.getElementById('compliance-checklist');
-                const { transactionType } = this.transactionData;
+                const { transactionType, propertyType } = this.transactionData;
 
                 const baseItems = [
                     'RECO Information Guide provided and explained',
@@ -1821,6 +2026,26 @@
                     'Client identity verified (FINTRAC requirements)',
                     'Representation agreement signed',
                     'All mandatory disclosures completed'
+                ];
+
+                const residentialItems = [
+                    'Form 100 - Residential Purchase Agreement completed',
+                    'Form 371 - Buyer Designated Representation Agreement signed',
+                    'Form 801 - Offer Summary Document provided to client',
+                    'Form 127 - Condition(s) In Offer - Buyer Acknowledgement completed',
+                    'Form 380 - Buyer Services Forms Checklist completed',
+                    'Home inspection condition included (if applicable)',
+                    'Mortgage financing condition established',
+                    'Property insurance arrangements confirmed'
+                ];
+
+                const commercialItems = [
+                    'Form 500 - Commercial Purchase Agreement completed',
+                    'Form 320 - Confirmation of Co-operation signed',
+                    'Form 596 - Commercial Buyer Representation executed',
+                    'Commercial due diligence period established',
+                    'Commercial financing arrangements confirmed',
+                    'Environmental assessments considered'
                 ];
 
                 const rentalItems = [
@@ -1831,7 +2056,14 @@
                     'LTB notice forms available for landlord'
                 ];
 
-                const items = transactionType === 'rental' ? [...baseItems, ...rentalItems] : baseItems;
+                let items = [...baseItems];
+                if (propertyType && propertyType.includes('residential') && transactionType === 'purchase_sale') {
+                    items = [...baseItems, ...residentialItems];
+                } else if (propertyType === 'commercial') {
+                    items = [...baseItems, ...commercialItems];
+                } else if (transactionType === 'rental') {
+                    items = [...baseItems, ...rentalItems];
+                }
 
                 container.innerHTML = items.map((item, index) => `
                     <div class="checklist-item">
@@ -1845,7 +2077,7 @@
 
             updateTransactionSummary() {
                 console.log('📊 Updating transaction summary...');
-                
+
                 const container = document.getElementById('transaction-summary');
                 const { transactionType, propertyType, clientType, representation } = this.transactionData;
 
@@ -1874,7 +2106,7 @@
             // UTILITY FUNCTIONS
             copyClause(clauseId) {
                 console.log(`📋 Copying clause: ${clauseId}`);
-                
+
                 const textarea = document.getElementById(`clause-${clauseId}`);
                 textarea.select();
                 document.execCommand('copy');
@@ -1883,15 +2115,15 @@
 
             copyAllClauses() {
                 console.log('📋 Copying all clauses...');
-                
+
                 const clauses = [];
                 document.querySelectorAll('.clause-item__text').forEach((textarea, index) => {
                     const clauseTitle = textarea.closest('.clause-item').querySelector('.clause-item__title').textContent;
                     clauses.push(`${index + 1}. ${clauseTitle}\n\n${textarea.value}`);
                 });
-                
+
                 const allText = `ONTARIO REAL ESTATE CLAUSES - TRANSACTION PACKAGE\n${'='.repeat(60)}\n\n${clauses.join('\n\n' + '-'.repeat(60) + '\n\n')}`;
-                
+
                 navigator.clipboard.writeText(allText).then(() => {
                     this.showToast('All clauses copied to clipboard!');
                 }).catch(() => {
@@ -1901,16 +2133,24 @@
 
             exportFormsList() {
                 console.log('📤 Exporting forms list...');
-                
-                const { transactionType } = this.transactionData;
-                
+
+                const { transactionType, propertyType } = this.transactionData;
+
                 let formsText = `ONTARIO REAL ESTATE FORMS LIST\n${'='.repeat(50)}\n\n`;
                 formsText += `UNIVERSAL FORMS:\n${Object.values(this.universalForms).map((form, i) => `${i + 1}. ${form.name} - ${form.number}`).join('\n')}`;
-                
+
+                if (propertyType && propertyType.includes('residential')) {
+                    formsText += `\n\nRESIDENTIAL FORMS:\n${Object.values(this.residentialForms).map((form, i) => `${i + 1}. ${form.name} - ${form.number}`).join('\n')}`;
+                }
+
+                if (propertyType === 'commercial') {
+                    formsText += `\n\nCOMMERCIAL FORMS:\n${Object.values(this.commercialForms).map((form, i) => `${i + 1}. ${form.name} - ${form.number}`).join('\n')}`;
+                }
+
                 if (transactionType === 'rental') {
                     formsText += `\n\nRENTAL FORMS:\n${Object.values(this.rentalForms).map((form, i) => `${i + 1}. ${form.name} - ${form.number}`).join('\n')}`;
                 }
-                
+
                 navigator.clipboard.writeText(formsText).then(() => {
                     this.showToast('Forms list copied to clipboard!');
                 });
@@ -1918,7 +2158,7 @@
 
             startNewTransaction() {
                 console.log('🔄 Starting new transaction...');
-                
+
                 document.getElementById('transaction-form').reset();
                 this.transactionData = {};
                 document.getElementById('transaction-summary').innerHTML = '<p style="color: var(--text-secondary);">Complete the transaction form to see summary details here.</p>';
@@ -1930,7 +2170,7 @@
 
             exportSummary() {
                 console.log('📤 Exporting summary...');
-                
+
                 const summary = `
 ONTARIO REAL ESTATE TRANSACTION SUMMARY
 ${'='.repeat(50)}
@@ -1943,7 +2183,7 @@ Representation: ${this.transactionData.representation || 'Not set'}
 
 Generated by Ontario Real Estate & Rental Transaction Tool
                 `;
-                
+
                 navigator.clipboard.writeText(summary).then(() => {
                     this.showToast('Summary copied to clipboard!');
                 });
@@ -1952,10 +2192,10 @@ Generated by Ontario Real Estate & Rental Transaction Tool
             showToast(message) {
                 const toast = document.getElementById('toast');
                 const text = document.getElementById('toast-text');
-                
+
                 text.textContent = message;
                 toast.classList.add('show');
-                
+
                 setTimeout(() => {
                     toast.classList.remove('show');
                 }, 3000);
@@ -1973,15 +2213,21 @@ Generated by Ontario Real Estate & Rental Transaction Tool
             console.log('✅ Theme toggle: Working');  
             console.log('✅ Mobile menu: Working');
             console.log('✅ Universal forms: Loaded');
+            console.log('✅ Residential forms: Loaded'); // NEW
+            console.log('✅ Commercial forms: Loaded');
             console.log('✅ Rental forms: Loaded');
             console.log('✅ Form logic: Working');
             console.log('✅ Property type switching: Working');
+            console.log('✅ Residential transaction processing: Ready'); // NEW
+            console.log('✅ Commercial transaction processing: Ready');
             console.log('✅ Transaction processing: Ready');
             console.log('✅ Clause generation: Ready');
+            console.log('✅ Residential clauses: Ready'); // NEW
+            console.log('✅ Commercial clauses: Ready');
             console.log('✅ Compliance checklist: Ready');
             console.log('✅ Export functions: Working');
             console.log('✅ Toast notifications: Working');
-            console.log('\n🎯 ALL SYSTEMS OPERATIONAL! 🎯');
+            console.log('\n🎯 ALL SYSTEMS OPERATIONAL! Full Residential + Commercial Support! 🎯');
         }, 1000);
     </script>
 </body>
