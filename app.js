@@ -895,7 +895,7 @@ class CompletePlatformWithSearch {
             <div class="clause-item">
                 <div class="clause-item__header">
                     <div class="clause-item__title">${clause.name}</div>
-                    <button class="btn btn--small btn--primary" onclick="platform.copyClause('${clause.id}')">Copy</button>
+                    <button class="btn btn--small btn--primary clause-item__copy" data-clause-id="${clause.id}">Copy</button>
                 </div>
                 <textarea class="clause-item__text" id="clause-${clause.id}" readonly>${clause.text}</textarea>
                 <div style="margin-top: var(--space-4);">
@@ -906,6 +906,15 @@ class CompletePlatformWithSearch {
                 </div>
             </div>
         `).join('');
+
+        container.querySelectorAll('.clause-item__copy').forEach(button => {
+            button.addEventListener('click', () => {
+                const { clauseId } = button.dataset;
+                if (clauseId) {
+                    this.copyClause(clauseId);
+                }
+            });
+        });
 
         console.log(`✅ Generated ${clauses.length} clauses`);
     }
