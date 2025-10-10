@@ -1,39 +1,44 @@
-# Forms & Clauses Compliance Audit (Post-Update)
+# Forms & Clauses Data Audit
 
-_Date: 2025-03-18_
+_Date: 2025-03-17_
 
-## Executive summary
-- **Overall status**: Core datasets now embed effective dates, source URLs, and brokerage guidance, and UI components render those fields consistently. Platform risk drops to **medium** pending automated guardrails and jurisdiction-aware toggles.【F:app.js†L129-L215】【F:app.js†L887-L940】
-- **Key gains**:
-  1. Search, lists, and exports hydrate from the same governed schema, eliminating drift between discovery and rendered packages.【F:app.js†L35-L118】【F:app.js†L887-L940】【F:app.js†L1314-L1363】
-  2. Transaction bundles now include Windsor-Essex disclosures (e.g., ERCA, short-term rental licences) with clear Jump Realty requirements and notes.【F:app.js†L219-L320】【F:app.js†L1073-L1126】
-  3. Clause records include provenance metadata and use the async Clipboard API with graceful fallback to avoid silent copy failures.【F:app.js†L521-L590】【F:app.js†L1268-L1294】
-- **Residual blockers**: Governance still lives inline in `app.js`, tests do not assert dataset integrity, and municipal logic is driven by property-type heuristics instead of geo-coded inputs.【F:app.js†L35-L320】【F:app.js†L1073-L1126】【F:app.js†L1184-L1237】
+## Scope and methodology
+- Reviewed the in-app form and clause catalog that powers search, onboarding defaults, and compliance messaging (`initializeSearchData`, `getUniversalForms`, `getRentalForms`, `getTransactionSpecificForms`, `getClauseDatabase`).【F:app.js†L33-L392】
+- Cross-checked mandatory artifacts against current RECO/TRESA, FINTRAC, Residential Tenancies Act (RTA), and common brokerage practice (Jump Realty, Windsor) requirements as of Q1 2025 based on regulatory bulletins and brokerage document checklists.
+- Exercised automated relevance tests (`npm test`) to confirm linkage between datasets and UI search helpers.【e6606b†L1-L13】
 
-## Update highlights
-### Governed datasets & search parity
-- Universal and rental inventories now track effective dates, compliance bases, and Jump Realty notes so advisors can see why each document exists and when it was last refreshed.【F:app.js†L129-L320】
-- `initializeSearchData` flattens the same canonical objects used for rendering, ensuring search results, checklists, and exports stay synchronized as metadata evolves.【F:app.js†L35-L118】
+## Functional wiring observations
+- The dashboard instantiates datasets twice: search metadata (`initializeSearchData`) and the canonical objects consumed by UI builders (`getUniversalForms`, etc.). The structures are not synchronized programmatically, creating a risk that future updates drift between search results and rendered checklists.【F:app.js†L33-L343】
+- Clause texts are stored as raw strings without provenance tags or effective-dates. There is no mechanism to validate updates against OREA master clauses or brokerage-approved templates before they surface in exports.【F:app.js†L345-L391】
+- No environment toggle exists for brokerage-specific customizations; Jump Realty’s internal clause packs or mandatory disclosures (e.g., local well/septic addenda) are not represented, so users could assume the library is brokerage-approved when it is not.【F:app.js†L262-L341】
 
-### Transaction bundles aligned with Windsor requirements
-- Each property bundle promotes a structured primary form plus supporting artefacts, flagging Jump Realty requirements such as ERCA/septic disclosures, Windsor student housing licences, and STR permits.【F:app.js†L219-L320】
-- Result generation surfaces official numbers, effective dates, and brokerage obligations so agents cannot miss mandatory add-ons during packaging.【F:app.js†L1073-L1126】
+## Data accuracy findings
 
-### Clause governance & tooling
-- Clauses now carry status, effective dates, and source links, giving auditors traceability to OREA and RTA references.【F:app.js†L521-L590】
-- Copy operations first use the modern Clipboard API and fall back with logging, preventing silent failures on locked-down browsers.【F:app.js†L1268-L1294】
-- Exports include numbering, effective dates, compliance anchors, and Jump Realty notes, so off-platform sharing retains context.【F:app.js†L1314-L1363】
+### Universal mandatory forms
+- Representation agreements are referenced by legacy OREA numbers (Form 200/300). OREA replaced these with TRESA-compliant documents (e.g., Form 123 – Buyer Representation Agreement, Form 220 – Seller Representation Agreement) in December 2023; the tool should surface the current identifiers to prevent brokers from issuing deprecated paperwork.【F:app.js†L198-L210】
+- Confirmation of Co-operation and Representation (Form 320) remains valid but now requires the RECO Information Guide acknowledgment prior to offer presentation; the workflow text does not mention this dependency.【F:app.js†L205-L210】
 
-### Checklist modernization
-- Compliance checklist messaging distinguishes between universal prerequisites and property-type specifics (e.g., Windsor STR licence uploads, student conduct acknowledgements).【F:app.js†L1184-L1237】
+### Rental catalogue
+- The Ontario Standard Lease entry hardcodes “Form 2229E (2025)”; the Ministry of Municipal Affairs and Housing last published the lease as Form 2229E (December 2023). The platform should remove the forward-dated year and pull the version from authoritative metadata to avoid misleading Jump Realty leasing teams.【F:app.js†L65-L71】【F:app.js†L217-L223】
+- “Move-in Condition Inspection Report” is flagged as an LTB form with an “RTA s.35 requirement”, yet the RTA does not mandate a prescribed inspection report; it is a best practice document. Mislabeling it as a statutory requirement could create false compliance alarms.【F:app.js†L231-L237】
+- Key deposit receipts cite “RTA s.134 compliance”, but section 134 prohibits security deposits beyond key costs rather than mandating a form. The tool should rephrase this as a policy reminder, not a statutory requirement.【F:app.js†L252-L258】
 
-## Outstanding work
-1. **Externalize datasets**: Move form and clause JSON into `/src/data` with schema validation so governance edits do not require redeploying `app.js`. Introduce checksum logging to detect out-of-band modifications.【F:app.js†L35-L320】
-2. **Automated assurance**: Extend Jest suites to verify that deprecated artefacts (e.g., SPIS) never surface, Jump Realty requirements appear for relevant property types, and exports include provenance tags.【F:app.js†L219-L320】【F:app.js†L1314-L1363】
-3. **Jurisdiction-aware logic**: Replace property-type heuristics with location inputs and municipal registries (e.g., Windsor By-law 135-2022) to toggle licensing artefacts based on actual property address.【F:app.js†L219-L320】【F:app.js†L1184-L1237】
-4. **Runtime telemetry**: Add console warnings/UI badges when forms lack `effectiveDate` or `sourceUrl` metadata to catch regressions during authoring.【F:app.js†L129-L215】
+### Transaction-specific forms
+- Freehold additional forms include the Seller Property Information Statement (SPIS). OREA withdrew the SPIS in 2017 due to liability concerns; Jump Realty no longer circulates it. Keeping it listed as a default additional form risks reintroducing retired paperwork.【F:app.js†L262-L271】
+- Student housing and short-term rental bundles describe modified or custom agreements without pointing to governing municipal bylaws (e.g., Windsor’s Short-Term Rental Licensing By-law 135-2022). These should link to current municipal requirements before agents rely on them.【F:app.js†L320-L340】
 
-## Next steps
-- Stand up a lightweight governance dashboard that consumes the centralized JSON, exposes diff history, and runs scheduled checks against RECO/OREA bulletins and Jump Realty memos.【F:app.js†L35-L215】
-- Document SOPs for quarterly AML risk matrix updates and municipal licence audits, embedding reminders into existing toast/notification flows.【F:app.js†L129-L215】【F:app.js†L1184-L1237】
-- Re-run this audit after externalizing data and adding automated tests to validate that new safeguards prevent reintroduction of deprecated documents.
+### Clause library
+- Clause identifiers (MORT-1, INSP-1, etc.) mirror OREA numbering but omit revision dates and brokerage approvals. Without this metadata the tool cannot evidence that the clauses match the latest OREA 2024 revisions or Jump Realty customizations.【F:app.js†L345-L389】
+- Rental clauses (RENT-1 to RENT-3) paraphrase statutory rights but are not tied to official LTB wording. Consider replacing them with the latest OREA Residential Lease Schedule or brokerage-authored clauses vetted by legal counsel.【F:app.js†L369-L390】
+
+## Compliance gaps impacting Jump Realty
+- Jump Realty uses brokerage-specific disclosures for local conservation authority, septic/well, and cross-border clientele that are absent from the current dataset, leading to incomplete packages for Windsor-Essex transactions.【F:app.js†L262-L341】
+- FINTRAC coverage is limited to identification and receipt of funds. Missing FINTRAC Risk Assessment templates and ongoing monitoring logs that Jump Realty’s policy manual expects agents to complete quarterly.【F:app.js†L177-L197】
+
+## Recommendations
+1. **Centralize datasets**: Move form and clause definitions into version-controlled JSON with schema validation to keep search and UI views synchronized.【F:app.js†L33-L343】
+2. **Update identifiers**: Replace legacy OREA references with current TRESA-compliant form numbers and add effective dates/version fields so agents can confirm regulatory currency.【F:app.js†L198-L210】【F:app.js†L345-L389】
+3. **Regulatory source linking**: Attach citations (URL/Document IDs) for each form/ clause referencing RECO, FINTRAC, RTA, or Jump Realty policy manuals to document provenance.【F:app.js†L161-L258】
+4. **Brokerage customization layer**: Introduce a configuration file for Jump Realty that injects required local clauses and disclosures, ensuring the platform reflects brokerage obligations without polluting the base dataset.【F:app.js†L262-L341】
+5. **Governance workflow**: Establish a quarterly review checklist and automated reminder within the tool to verify forms against RECO bulletins, OREA releases, and Jump Realty compliance memos.【F:app.js†L33-L343】
+
