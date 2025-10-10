@@ -1,0 +1,10 @@
+{
+  "name": "ontario-real-estate-compliance-tool",
+  "version": "1.0.0",
+  "description": "Ontario real estate compliance dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.js"
+  }
+}
