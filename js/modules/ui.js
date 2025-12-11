@@ -10,13 +10,15 @@ export function updateThemeUI(theme) {
     const themeText = document.getElementById('theme-text');
 
     if (theme === 'dark') {
-        themeIconLight?.classList.add('hidden');
-        themeIconDark?.classList.remove('hidden');
-        if (themeText) themeText.textContent = 'Light';
-    } else {
+        // Dark Mode: Show Sun (to switch to Light), Hide Moon
         themeIconLight?.classList.remove('hidden');
         themeIconDark?.classList.add('hidden');
-        if (themeText) themeText.textContent = 'Dark';
+        if (themeText) themeText.textContent = 'Light Mode';
+    } else {
+        // Light Mode: Show Moon (to switch to Dark), Hide Sun
+        themeIconLight?.classList.add('hidden'); // Sun hidden
+        themeIconDark?.classList.remove('hidden'); // Moon visible
+        if (themeText) themeText.textContent = 'Dark Mode';
     }
 }
 

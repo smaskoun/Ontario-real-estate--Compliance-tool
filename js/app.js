@@ -38,14 +38,21 @@ let currentTransaction = {
 
 let currentStep = 1;
 
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize Application
+const init = () => {
+    console.log('Initializing App...');
     initializeTheme();
     initializeData();
     setupEventListeners();
-
-    // Initialize Wizard
     updateWizardUI(currentStep);
-});
+    console.log('App Initialized.');
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
 
 function initializeTheme() {
     const theme = loadTheme();
