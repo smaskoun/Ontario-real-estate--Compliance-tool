@@ -3,315 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Ontario Real Estate & Rental Transaction Tool - Complete Platform</title>
+    <title>Complete Ontario Real Estate Transaction Tool</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-    <!-- COMPLETE TESTED DASHBOARD WITH WORKING SEARCH -->
-    <div class="dashboard">
-        
-        <!-- HEADER WITH SEARCH -->
-        <header class="header">
-            <div class="header__left">
-                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    <!-- THEME TOGGLE BUTTON -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="theme-toggle-icon" id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="m12 7-4-4M12 17l-4 4M17 12h4M7 12H3M15.54 8.46l2.83-2.83M5.17 19.83l2.83-2.83M8.46 15.54l-2.83 2.83M19.83 5.17l-2.83 2.83"></path>
+        </svg>
+        <svg class="theme-toggle-icon hidden" id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span id="theme-text">Dark</span>
+    </button>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__branding">
+                    <h1 class="header__title">Ontario Real Estate Transaction Tool</h1>
+                    <p class="header__subtitle">Full Compliance Edition | RECO | FINTRAC | PIPEDA</p>
+                </div>
+                <div class="header__logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
                     </svg>
-                </button>
-                <div>
-                    <h1 class="header__title">Ontario Real Estate & Rental Tool</h1>
-                    <p class="header__subtitle">Professional Compliance Dashboard | RECO | FINTRAC | RTA</p>
                 </div>
             </div>
-            
-            <!-- WORKING SEARCH BAR -->
-            <div class="search-container">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    placeholder="Search forms, clauses, or templates" 
-                    id="searchInput"
-                    autocomplete="off"
-                >
-                <div class="search-results" id="searchResults">
-                    <!-- Search results populated by JavaScript -->
-                </div>
-            </div>
-            
-            <div class="header__right">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
-                    <svg class="theme-icon" id="light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                    <svg class="theme-icon hidden" id="dark-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                    </svg>
-                    <span id="theme-text">Dark</span>
-                </button>
-            </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- SIDEBAR NAVIGATION -->
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar__section">
-                <h2 class="sidebar__title">Navigation</h2>
-                <button class="nav-item active" data-section="overview">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                    Dashboard Overview
-                </button>
-                <button class="nav-item" data-section="transaction-setup">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                    </svg>
-                    Transaction Setup
-                </button>
-                <button class="nav-item" data-section="results">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Results & Analysis
-                </button>
-            </div>
+    <main class="main">
+        <div class="container">
             
-            <div class="sidebar__section">
-                <h2 class="sidebar__title">Quick Actions</h2>
-                <button class="nav-item" id="start-new-btn">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Start New Transaction
-                </button>
-                <button class="nav-item" id="export-summary-btn">
-                    <svg class="nav-item__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Export Summary
-                </button>
-            </div>
-        </nav>
-
-        <!-- MAIN CONTENT AREA -->
-        <main class="main" id="main">
-            <div class="main__content">
-                
-                <!-- OVERVIEW SECTION -->
-                <section id="section-overview" class="section">
-                    
-                    <!-- Universal Forms Grid -->
-                    <div class="grid grid--2">
-                        <div class="card status-card--warning">
-                            <div class="card__header">
-                                <h2 class="card__title">⚠️ Universal Mandatory Forms</h2>
-                                <p class="card__subtitle">Required for all Ontario real estate transactions</p>
-                            </div>
-                            <div class="card__body">
-                                <div class="form-list" id="universal-forms">
-                                    <!-- Universal forms populated by JS -->
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card status-card--info">
-                            <div class="card__header">
-                                <h2 class="card__title">🏠 Rental Universal Forms</h2>
-                                <p class="card__subtitle">Additional forms for rental transactions</p>
-                            </div>
-                            <div class="card__body">
-                                <div class="form-list" id="rental-universal-forms">
-                                    <!-- Rental forms populated by JS -->
-                                </div>
-                            </div>
-                        </div>
+            <!-- WIZARD PROGRESS -->
+            <div class="wizard-header">
+                <div class="wizard-progress-container">
+                    <div class="wizard-progress-track">
+                        <div class="wizard-progress-fill" id="progress-fill" style="width: 25%"></div>
                     </div>
-                </section>
+                </div>
+                <div class="wizard-step-labels" id="wizard-steps-indicator">
+                    <div class="wizard-step-label active" data-step="1">
+                        <span class="step-circle">1</span>
+                        <span class="step-text">Basics</span>
+                    </div>
+                    <div class="wizard-step-label" data-step="2">
+                        <span class="step-circle">2</span>
+                        <span class="step-text">Representation</span>
+                    </div>
+                    <div class="wizard-step-label" data-step="3">
+                        <span class="step-circle">3</span>
+                        <span class="step-text">Details</span>
+                    </div>
+                    <div class="wizard-step-label" data-step="4">
+                        <span class="step-circle">4</span>
+                        <span class="step-text">Review</span>
+                    </div>
+                </div>
+            </div>
 
-                <!-- TRANSACTION SETUP SECTION -->
-                <section id="section-transaction-setup" class="section hidden">
-                    <div class="form-section">
-                        <h2 class="form-section__title">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                            Complete Transaction Profile
-                        </h2>
-                        
-                        <form id="transaction-form">
-                            <div class="grid grid--2">
-                                <div class="form-group">
-                                    <label class="form-label">Transaction Type</label>
-                                    <div class="options-grid">
-                                        <label class="option-card">
-                                            <input type="radio" name="transaction_type" value="purchase_sale" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Purchase & Sale</div>
-                                                <div class="option-card__description">Buying or selling real estate</div>
-                                            </div>
-                                        </label>
-                                        <label class="option-card">
-                                            <input type="radio" name="transaction_type" value="rental" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Rental & Leasing</div>
-                                                <div class="option-card__description">Residential or commercial leasing</div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
+            <!-- Universal Mandatory Forms (Always Visible or First Step? Let's keep it separate for awareness, or better, put it in Results) 
+                 Actually, the original design had it at the top. 
+                 To keep it clean, let's move it to Step 4 (Results) or a dedicated Info section.
+                 The user wanted "User Friendly". Hiding the big warning block initially is friendlier.
+                 I will move it to the Results section.
+            -->
 
-                                <div class="form-group">
-                                    <label class="form-label">Property Type</label>
-                                    <div class="options-grid" id="property-type-options">
-                                        <!-- Property type options populated by JS -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="grid grid--2">
-                                <div class="form-group">
-                                    <label class="form-label">Client Type</label>
-                                    <div class="options-grid">
-                                        <label class="option-card">
-                                            <input type="radio" name="client_type" value="individual" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Individual</div>
-                                                <div class="option-card__description">Personal buyers/sellers/tenants</div>
-                                            </div>
-                                        </label>
-                                        <label class="option-card">
-                                            <input type="radio" name="client_type" value="corporate" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Corporate</div>
-                                                <div class="option-card__description">Companies, corporations</div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label">Representation Status</label>
-                                    <div class="options-grid">
-                                        <label class="option-card">
-                                            <input type="radio" name="representation" value="client_represented" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Client Represented</div>
-                                                <div class="option-card__description">You represent the client</div>
-                                            </div>
-                                        </label>
-                                        <label class="option-card">
-                                            <input type="radio" name="representation" value="multiple_representation" required>
-                                            <div class="option-card__content">
-                                                <div class="option-card__title">Multiple Representation</div>
-                                                <div class="option-card__description">You represent both parties</div>
-                                            </div>
-                                        </label>
-                                    </div>
+            <form id="transaction-form" class="form wizard-form">
+                
+                <!-- STEP 1 -->
+                <div class="wizard-step active" data-step="1">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>Step 1: Transaction Basics</h2>
+                            <p class="text-secondary">Let's start with the fundamental details of the property and client.</p>
+                        </div>
+                        <div class="card__body">
+                            <div class="form-group">
+                                <label class="form-label">Property Type <span class="required">*</span></label>
+                                <div class="form-group__options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="property_type" value="residential_freehold" required>
+                                        <div>
+                                            <span class="radio-option__label">Residential Freehold</span>
+                                            <div class="radio-option__description">Houses, townhomes, detached properties</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="property_type" value="residential_condo" required>
+                                        <div>
+                                            <span class="radio-option__label">Residential Condo</span>
+                                            <div class="radio-option__description">Condo units, apartments</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="property_type" value="commercial" required>
+                                        <div>
+                                            <span class="radio-option__label">Commercial</span>
+                                            <div class="radio-option__description">Office, retail, industrial</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="property_type" value="vacant_land" required>
+                                        <div>
+                                            <span class="radio-option__label">Vacant Land</span>
+                                            <div class="radio-option__description">Undeveloped lots</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="property_type" value="new_construction" required>
+                                        <div>
+                                            <span class="radio-option__label">New Construction</span>
+                                            <div class="radio-option__description">Pre-construction, newly built</div>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
+                                <label class="form-label">Client Type <span class="required">*</span></label>
+                                <div class="form-group__options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="client_type" value="individual" required>
+                                        <div>
+                                            <span class="radio-option__label">Individual</span>
+                                            <div class="radio-option__description">Personal buyers/sellers</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="client_type" value="corporate" required>
+                                        <div>
+                                            <span class="radio-option__label">Corporate</span>
+                                            <div class="radio-option__description">Companies, corporations</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="client_type" value="mixed" required>
+                                        <div>
+                                            <span class="radio-option__label">Mixed</span>
+                                            <div class="radio-option__description">Individual + Corporate</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="wizard-step hidden" data-step="2">
+                    <div class="card">
+                        <div class="card__header">
+                             <h2>Step 2: Representation & Financing</h2>
+                             <p class="text-secondary">Define your relationship with the client and how funds are handled.</p>
+                        </div>
+                        <div class="card__body">
+                             <div class="form-group">
+                                <label class="form-label">Representation Status <span class="required">*</span></label>
+                                <div class="form-group__options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="representation_status" value="client_represented" required>
+                                        <div>
+                                            <span class="radio-option__label">Client Represented</span>
+                                            <div class="radio-option__description">You represent the client</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="representation_status" value="self_represented" required>
+                                        <div>
+                                            <span class="radio-option__label">Self-Represented</span>
+                                            <div class="radio-option__description">Party represents themselves</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="representation_status" value="multiple_representation" required>
+                                        <div>
+                                            <span class="radio-option__label">Multiple Representation</span>
+                                            <div class="radio-option__description">You represent both parties</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Fund Handling <span class="required">*</span></label>
+                                <div class="form-group__options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="fund_handling" value="deposits_received" required>
+                                        <div>
+                                            <span class="radio-option__label">Deposits Received</span>
+                                            <div class="radio-option__description">Brokerage handles funds</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="fund_handling" value="no_funds" required>
+                                        <div>
+                                            <span class="radio-option__label">No Funds Handled</span>
+                                            <div class="radio-option__description">No deposit handling</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="wizard-step hidden" data-step="3">
+                    <div class="card">
+                         <div class="card__header">
+                             <h2>Step 3: Specific Details</h2>
+                             <p class="text-secondary">Select any additional factors that apply to this transaction.</p>
+                         </div>
+                         <div class="card__body">
+                            <div class="form-group">
                                 <label class="form-label">Additional Characteristics</label>
-                                <div class="options-grid" id="additional-characteristics">
-                                    <!-- Additional characteristics populated by JS -->
+                                <div class="form-group__options form-group__options--checkboxes">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="high_value">
+                                        <span class="checkbox-option__label">High Value ($1M+)</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="out_of_province">
+                                        <span class="checkbox-option__label">Out-of-Province Clients</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="foreign_nationals">
+                                        <span class="checkbox-option__label">Foreign Nationals</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="expedited">
+                                        <span class="checkbox-option__label">Expedited Timeline</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="needs_financing">
+                                        <span class="checkbox-option__label">Needs Financing</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="first_time_buyer">
+                                        <span class="checkbox-option__label">First-Time Buyer</span>
+                                    </label>
+                                     <label class="checkbox-option">
+                                        <input type="checkbox" name="transaction_details" value="rural">
+                                        <span class="checkbox-option__label">Rural Property</span>
+                                    </label>
                                 </div>
                             </div>
-
-                            <div class="export-grid mt-6">
-                                <button type="submit" class="btn btn--primary btn--large">Generate Analysis</button>
-                                <button type="reset" class="btn btn--outline">Reset Form</button>
-                            </div>
-                        </form>
+                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- RESULTS SECTION -->
-                <section id="section-results" class="section hidden">
-                    <div class="results">
-                        <div class="results__main">
-                            <!-- Transaction-Specific Forms -->
-                            <div class="card">
-                                <div class="card__header">
-                                    <h2 class="card__title">Transaction-Specific Forms</h2>
-                                    <p class="card__subtitle">Required forms for your transaction type</p>
-                                </div>
-                                <div class="card__body">
-                                    <div id="specific-forms">
-                                        <!-- Specific forms populated by JS -->
-                                    </div>
-                                </div>
+                <!-- WIZARD NAVIGATION -->
+                <div class="wizard-navigation">
+                    <button type="button" id="prevBtn" class="btn btn--secondary btn--large hidden" style="min-width: 120px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                        Back
+                    </button>
+                    <button type="button" id="nextBtn" class="btn btn--primary btn--large" style="min-width: 140px;">
+                        Next
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                    <button type="submit" id="submitBtn" class="btn btn--success btn--large hidden" style="min-width: 180px;">
+                        Generate Analysis
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <!-- RESULTS SECTION -->
+            <div id="results-section" class="results-section hidden">
+                
+                <div class="text-center" style="margin-bottom: var(--space-32);">
+                    <button id="restartBtn" class="btn btn--outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                             <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        Edit / Restart Transaction
+                    </button>
+                </div>
+
+                 <!-- Universal Forms (Moved here) -->
+                 <div class="card warning-card">
+                    <div class="card__header">
+                        <div class="warning-header">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                <path d="M12 9v4"/>
+                                <path d="m12 17 .01 0"/>
+                            </svg>
+                            <h2>MANDATORY FORMS (ALL TRANSACTIONS)</h2>
+                        </div>
+                    </div>
+                    <div class="card__body">
+                        <div id="universal-forms-list" class="universal-forms-list"></div>
+                    </div>
+                </div>
+
+                <!-- Specific Forms -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Property-Specific Forms</h2>
+                    </div>
+                    <div class="card__body">
+                        <div id="property-forms-list" class="property-forms-list"></div>
+                    </div>
+                </div>
+
+                <!-- Clauses -->
+                <div class="card">
+                     <div class="card__header">
+                        <h2>Clause Recommendations</h2>
+                     </div>
+                     <div class="card__body">
+                         <div class="clauses-section">
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Mandatory</h3>
+                                <div id="mandatory-clauses" class="clauses-list"></div>
                             </div>
-
-                            <!-- Clauses -->
-                            <div class="card">
-                                <div class="card__header">
-                                    <h2 class="card__title">Recommended Clauses</h2>
-                                    <p class="card__subtitle">Copy-ready clause text for agreements</p>
-                                </div>
-                                <div class="card__body">
-                                    <div id="clauses-container">
-                                        <!-- Clauses populated by JS -->
-                                    </div>
-                                </div>
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Recommended</h3>
+                                <div id="recommended-clauses" class="clauses-list"></div>
+                            </div>
+                            <div class="clause-category">
+                                <h3 class="clause-category__title">Conditional</h3>
+                                <div id="conditional-clauses" class="clauses-list"></div>
                             </div>
                         </div>
+                     </div>
+                </div>
 
-                        <div class="results__sidebar">
-                            <!-- Compliance Checklist -->
-                            <div class="card">
-                                <div class="card__header">
-                                    <h2 class="card__title">Compliance Checklist</h2>
-                                    <p class="card__subtitle">Ensure all requirements are met</p>
-                                </div>
-                                <div class="card__body">
-                                    <div id="compliance-checklist">
-                                        <!-- Checklist populated by JS -->
-                                    </div>
-                                </div>
-                            </div>
+                <!-- Compliance -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Compliance Checklist</h2>
+                    </div>
+                     <div class="card__body">
+                        <div id="compliance-checklist" class="compliance-checklist"></div>
+                    </div>
+                </div>
 
-                            <!-- Export Actions -->
-                            <div class="card">
-                                <div class="card__header">
-                                    <h2 class="card__title">Export & Actions</h2>
-                                </div>
-                                <div class="card__body">
-                                    <div class="export-grid">
-                                        <button class="btn btn--primary btn--small" id="copy-clauses-btn">Copy Clauses</button>
-                                        <button class="btn btn--secondary btn--small" id="print-checklist-btn">Print List</button>
-                                        <button class="btn btn--outline btn--small" id="export-forms-btn">Export Forms</button>
-                                    </div>
-                                </div>
-                            </div>
+                <!-- Export -->
+                 <div class="card">
+                    <div class="card__header">
+                        <h2>Actions</h2>
+                    </div>
+                    <div class="card__body">
+                        <div class="export-actions">
+                             <button id="copy-all-clauses" class="btn btn--primary">Copy All Clauses</button>
+                             <button id="generate-summary" class="btn btn--success">Transaction Summary</button>
+                             <button id="print-checklist" class="btn btn--secondary">Print Checklist</button>
+                             <button id="export-forms" class="btn btn--secondary">Export Forms List</button>
                         </div>
                     </div>
-                </section>
-
+                </div>
             </div>
-        </main>
 
-        <!-- RIGHT PANEL -->
-        <aside class="panel" id="panel">
-            <h2 class="panel__title">Transaction Summary</h2>
-            <div id="transaction-summary">
-                <p style="color: var(--text-secondary);">Complete the transaction form to see summary details here.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+             <div class="footer__content">
+                <p class="footer__disclaimer">
+                    <strong>Disclaimer:</strong> Tool for educational/compliance aid purposes. Consult legal counsel.
+                </p>
+                <p class="footer__copyright">© 2025 Ontario Real Estate Compliance Tool</p>
             </div>
-        </aside>
+        </div>
+    </footer>
 
+    <div id="copy-toast" class="copy-toast">
+        <div class="copy-toast__content">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4 12"></polyline>
+            </svg>
+            <span class="copy-toast__text">Copied!</span>
+        </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <svg class="toast__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <span class="toast__text" id="toast-text">Success!</span>
-    </div>
-
-    <script type="module" src="app.js"></script>
-
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
