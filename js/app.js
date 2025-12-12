@@ -57,6 +57,7 @@ if (document.readyState === 'loading') {
 function initializeTheme() {
     const theme = loadTheme();
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-color-scheme', theme);
     updateThemeUI(theme);
 }
 
@@ -91,6 +92,7 @@ function setupEventListeners() {
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
             document.documentElement.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-color-scheme', newTheme);
             saveTheme(newTheme);
             updateThemeUI(newTheme);
             showCopyToast(`Switched to ${newTheme} mode!`);
