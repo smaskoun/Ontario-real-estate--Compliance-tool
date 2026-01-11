@@ -23,6 +23,10 @@ import {
     generateCompleteTransactionSummary,
     exportFormList
 } from './modules/export.js';
+import { filterSearchResults, highlightMatches, MIN_QUERY_LENGTH } from '../src/search/filter.js';
+import { createDebouncedFunction } from '../src/utils/debounce.js';
+import { universalMandatoryForms, transactionSpecificForms } from './data/forms.js';
+import { clauseDatabase } from './data/clauses.js';
 
 // Application State
 let currentTransaction = {
@@ -207,6 +211,39 @@ function setupEventListeners() {
             }
         }
     });
+
+    // Search functionality
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+
+    if (searchInput) {
+        const debouncedSearch = createDebouncedFunction(handleSearch, 300);
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+
+            // Show/hide clear button
+            if (clearSearchBtn) {
+                if (query.length > 0) {
+                    clearSearchBtn.classList.remove('hidden');
+                } else {
+                    clearSearchBtn.classList.add('hidden');
+                }
+            }
+
+            debouncedSearch(query);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                clearSearch();
+            }
+        });
+    }
+
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', clearSearch);
+    }
 }
 
 function handleFormSubmission(formData) {
@@ -300,4 +337,191 @@ function resetTransactionState() {
         timingUrgency: null
     };
     clearTransactionState();
+}
+
+// Search Functions
+function prepareSearchData() {
+    const forms = [];
+    const clauses = [];
+
+    // Add universal mandatory forms
+    Object.entries(universalMandatoryForms).forEach(([id, form]) => {
+        forms.push({
+            id,
+            title: form.form_name,
+            subtitle: form.form_number,
+            description: form.purpose,
+            keywords: [form.compliance, form.when_required, form.notes],
+            category: 'Universal Mandatory',
+            type: 'form'
+        });
+    });
+
+    // Add property-specific forms
+    Object.entries(transactionSpecificForms).forEach(([propertyType, formSet]) => {
+        if (formSet.primary) {
+            forms.push({
+                id: `${propertyType}_primary`,
+                title: formSet.primary,
+                subtitle: propertyType,
+                description: 'Primary Agreement Form',
+                keywords: [],
+                category: 'Property-Specific',
+                type: 'form'
+            });
+        }
+
+        if (formSet.additional && Array.isArray(formSet.additional)) {
+            formSet.additional.forEach((formName, idx) => {
+                forms.push({
+                    id: `${propertyType}_additional_${idx}`,
+                    title: formName,
+                    subtitle: propertyType,
+                    description: 'Additional Form',
+                    keywords: [],
+                    category: 'Property-Specific',
+                    type: 'form'
+                });
+            });
+        }
+    });
+
+    // Add clauses
+    Object.entries(clauseDatabase).forEach(([id, clause]) => {
+        clauses.push({
+            id,
+            title: clause.name,
+            subtitle: clause.category,
+            description: clause.purpose,
+            keywords: [clause.when_to_use, clause.risk_without],
+            category: clause.category,
+            type: 'clause'
+        });
+    });
+
+    return { forms, clauses };
+}
+
+function handleSearch(query) {
+    const normalizedQuery = query?.trim() || '';
+
+    // If query is too short, show all items
+    if (normalizedQuery.length < MIN_QUERY_LENGTH) {
+        clearSearch();
+        return;
+    }
+
+    const searchData = prepareSearchData();
+    const results = filterSearchResults(searchData, normalizedQuery);
+
+    // Create a Set of matching IDs for quick lookup
+    const matchingFormIds = new Set();
+    const matchingClauseIds = new Set();
+
+    results.forEach(result => {
+        if (result.type === 'form') {
+            matchingFormIds.add(result.id);
+        } else if (result.type === 'clause') {
+            matchingClauseIds.add(result.id);
+        }
+    });
+
+    // Filter forms and clauses in the UI
+    filterFormsInUI(matchingFormIds, normalizedQuery);
+    filterClausesInUI(matchingClauseIds, normalizedQuery);
+
+    // Update search results count
+    updateSearchResultsCount(results.length, normalizedQuery);
+}
+
+function filterFormsInUI(matchingFormIds, query) {
+    // Filter universal forms
+    const universalFormsList = document.getElementById('universal-forms-list');
+    if (universalFormsList) {
+        const formItems = universalFormsList.querySelectorAll('.form-item');
+        formItems.forEach((item, index) => {
+            const formId = Object.keys(universalMandatoryForms)[index];
+            if (matchingFormIds.size === 0 || matchingFormIds.has(formId)) {
+                item.classList.remove('no-search-match');
+            } else {
+                item.classList.add('no-search-match');
+            }
+        });
+    }
+
+    // Filter property-specific forms
+    const propertyFormsList = document.getElementById('property-forms-list');
+    if (propertyFormsList) {
+        const formCategories = propertyFormsList.querySelectorAll('.forms-category');
+        formCategories.forEach(category => {
+            if (matchingFormIds.size === 0) {
+                category.classList.remove('no-search-match');
+            } else {
+                // Check if any forms in this category match
+                const hasMatch = Array.from(matchingFormIds).some(id =>
+                    id.startsWith(currentTransaction.propertyType || '')
+                );
+                if (hasMatch) {
+                    category.classList.remove('no-search-match');
+                } else {
+                    category.classList.add('no-search-match');
+                }
+            }
+        });
+    }
+}
+
+function filterClausesInUI(matchingClauseIds, query) {
+    const clauseCategories = ['mandatory-clauses', 'recommended-clauses', 'conditional-clauses'];
+
+    clauseCategories.forEach(categoryId => {
+        const container = document.getElementById(categoryId);
+        if (!container) return;
+
+        const clauseItems = container.querySelectorAll('.clause-item');
+        clauseItems.forEach(item => {
+            const clauseId = item.querySelector('.clause-item__copy-btn')?.dataset.clauseId;
+
+            if (matchingClauseIds.size === 0 || (clauseId && matchingClauseIds.has(clauseId))) {
+                item.classList.remove('no-search-match');
+            } else {
+                item.classList.add('no-search-match');
+            }
+        });
+    });
+}
+
+function updateSearchResultsCount(count, query) {
+    const resultsCount = document.getElementById('search-results-count');
+    if (resultsCount) {
+        if (query.length >= MIN_QUERY_LENGTH) {
+            resultsCount.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${query}"`;
+            resultsCount.classList.remove('hidden');
+        } else {
+            resultsCount.classList.add('hidden');
+        }
+    }
+}
+
+function clearSearch() {
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+    const resultsCount = document.getElementById('search-results-count');
+
+    if (searchInput) {
+        searchInput.value = '';
+    }
+
+    if (clearSearchBtn) {
+        clearSearchBtn.classList.add('hidden');
+    }
+
+    if (resultsCount) {
+        resultsCount.classList.add('hidden');
+    }
+
+    // Remove all filters
+    document.querySelectorAll('.no-search-match').forEach(item => {
+        item.classList.remove('no-search-match');
+    });
 }

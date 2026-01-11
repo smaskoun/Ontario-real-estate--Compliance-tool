@@ -1846,6 +1846,94 @@ select {
     min-width: 120px;
 }
 
+/* Search Container */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.search-icon {
+    position: absolute;
+    left: var(--space-16);
+    color: var(--text-secondary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.search-input {
+    flex: 1;
+    padding: var(--space-12) var(--space-16) var(--space-12) var(--space-48);
+    font-size: var(--font-size-md);
+    font-family: var(--font-family-base);
+    color: var(--text-main);
+    background: var(--bg-main);
+    border: 2px solid var(--border-main);
+    border-radius: var(--border-radius-lg);
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: var(--focus-ring);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: var(--space-12);
+    padding: var(--space-8);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-main);
+}
+
+.clear-search-btn:active {
+    transform: scale(0.95);
+}
+
+.search-results-count {
+    padding: var(--space-8) 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Search Highlight */
+.highlight {
+    background-color: rgba(var(--color-teal-500-rgb), 0.25);
+    color: var(--text-main);
+    font-weight: var(--font-weight-medium);
+    padding: 2px 0;
+    border-radius: 2px;
+}
+
+[data-theme="dark"] .highlight {
+    background-color: rgba(var(--color-teal-500-rgb), 0.35);
+}
+
+/* Hidden when no search results */
+.no-search-match {
+    display: none !important;
+}
+
 /* Hidden utility */
 .hidden { display: none !important; }
 
