@@ -738,7 +738,7 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-```css
+
 /* Ontario Real Estate Transaction Tool - Modified for Design System */
 
 :root {
@@ -749,7 +749,7 @@ select.form-control {
   --success: var(--color-success);
   --warning: var(--color-warning);
   --danger: var(--color-error);
-  
+
   /* Light Theme Default Colors */
   --bg-main: var(--color-surface);
   --bg-secondary: var(--color-background);
@@ -1551,31 +1551,31 @@ body {
   .container {
     padding: 0 var(--space-16);
   }
-  
+
   .header {
     padding: var(--space-24) 0;
     margin-bottom: var(--space-24);
   }
-  
+
   .header__content {
     flex-direction: column;
     text-align: center;
     gap: var(--space-16);
   }
-  
+
   .header__logo {
     margin-left: 0;
     margin-top: 0;
   }
-  
+
   .header__title {
     font-size: var(--font-size-3xl);
   }
-  
+
   .header__subtitle {
     font-size: var(--font-size-lg);
   }
-  
+
   .theme-toggle {
     top: var(--space-16) !important;
     right: var(--space-16) !important;
@@ -1583,51 +1583,51 @@ body {
     font-size: var(--font-size-xs) !important;
     min-width: 80px !important;
   }
-  
+
   .theme-toggle-icon {
     width: 16px !important;
     height: 16px !important;
   }
-  
+
   .universal-forms-list {
     grid-template-columns: 1fr;
     gap: var(--space-16);
   }
-  
+
   .form-item {
     padding: var(--space-16);
     min-height: auto;
   }
-  
+
   .form-item__header {
     flex-direction: column;
     gap: var(--space-12);
   }
-  
+
   .form-item__name {
     font-size: var(--font-size-lg);
   }
-  
+
   .form__actions {
     flex-direction: column;
     gap: var(--space-16);
   }
-  
+
   .clause-item__header {
     flex-direction: column;
     gap: var(--space-12);
   }
-  
+
   .clause-item__details {
     grid-template-columns: 1fr;
     gap: var(--space-12);
   }
-  
+
   .export-actions {
     grid-template-columns: 1fr;
     gap: var(--space-12);
   }
-  
+
   .card__header,
   .card__body {
     padding: var(--space-20);
@@ -1638,19 +1638,19 @@ body {
   .container {
     padding: 0 var(--space-16);
   }
-  
+
   .form__actions {
     flex-direction: column;
   }
-  
+
   .clause-item__header {
     flex-direction: column;
   }
-  
+
   .clause-item__details {
     grid-template-columns: 1fr;
   }
-  
+
   .export-actions {
     grid-template-columns: 1fr;
   }
@@ -1812,26 +1812,68 @@ select {
     letter-spacing: 1px;
 }
 
-/* Wizard Steps Animation */
+/* ===== ENHANCED WIZARD ANIMATIONS ===== */
 .wizard-step {
     display: none;
-    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .wizard-step.active {
     display: block;
+    animation: slideInFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slideUpFade {
-    from { 
-        opacity: 0; 
-        transform: translateY(10px); 
+@keyframes slideInFade {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
+
+/* Staggered fade-in for results */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-item,
+.clause-item,
+.compliance-item {
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Stagger delays for sequential appearance */
+.form-item:nth-child(1) { animation-delay: 0.05s; }
+.form-item:nth-child(2) { animation-delay: 0.1s; }
+.form-item:nth-child(3) { animation-delay: 0.15s; }
+.form-item:nth-child(4) { animation-delay: 0.2s; }
+.form-item:nth-child(5) { animation-delay: 0.25s; }
+.form-item:nth-child(6) { animation-delay: 0.3s; }
+.form-item:nth-child(7) { animation-delay: 0.35s; }
+.form-item:nth-child(8) { animation-delay: 0.4s; }
+.form-item:nth-child(9) { animation-delay: 0.45s; }
+.form-item:nth-child(10) { animation-delay: 0.5s; }
+.form-item:nth-child(11) { animation-delay: 0.55s; }
+
+.clause-item:nth-child(1) { animation-delay: 0.05s; }
+.clause-item:nth-child(2) { animation-delay: 0.1s; }
+.clause-item:nth-child(3) { animation-delay: 0.15s; }
+.clause-item:nth-child(4) { animation-delay: 0.2s; }
+.clause-item:nth-child(5) { animation-delay: 0.25s; }
+.clause-item:nth-child(6) { animation-delay: 0.3s; }
 
 .wizard-navigation {
     display: flex;
@@ -1846,6 +1888,124 @@ select {
     min-width: 120px;
 }
 
+/* ===== SUCCESS BUTTON ANIMATION ===== */
+@keyframes successPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.btn--success:active {
+    animation: successPulse 0.3s ease-in-out;
+}
+
+/* ===== ENHANCED TOAST NOTIFICATION ===== */
+.copy-toast {
+    position: fixed;
+    bottom: var(--space-24);
+    right: var(--space-24);
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-primary-hover) 100%);
+    color: var(--color-btn-primary-text);
+    padding: var(--space-16) var(--space-24);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(150px) scale(0.9);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+    font-weight: var(--font-weight-semibold);
+    min-width: 200px;
+}
+
+.copy-toast.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.copy-toast__content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+}
+
+.copy-toast__content svg {
+    animation: checkmarkDraw 0.5s ease-in-out;
+}
+
+@keyframes checkmarkDraw {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
 /* Hidden utility */
 .hidden { display: none !important; }
 
+/* ===== ENHANCED RADIO/CHECKBOX OPTIONS ===== */
+.radio-option,
+.checkbox-option {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.radio-option:hover,
+.checkbox-option:hover {
+    transform: translateX(4px);
+}
+
+.radio-option input:checked ~ div,
+.checkbox-option input:checked ~ span {
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Add subtle glow to selected items */
+.radio-option:has(input:checked) {
+    box-shadow: 0 0 0 2px var(--color-primary),
+                0 4px 12px rgba(var(--color-primary-rgb, 33, 128, 141), 0.2);
+}
+
+/* Progress bar animation */
+.wizard-progress-fill {
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card hover enhancements */
+.card {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Form item badge styling */
+.form-item__number {
+    display: inline-block;
+    padding: var(--space-4) var(--space-12);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: var(--color-btn-primary-text);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(var(--color-primary-rgb, 33, 128, 141), 0.3);
+}
+
+/* Clause reference badge */
+.clause-item__reference {
+    display: inline-block;
+    padding: var(--space-2) var(--space-8);
+    background: var(--color-secondary);
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-family-mono);
+}
