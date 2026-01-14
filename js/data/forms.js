@@ -1,7 +1,7 @@
 
 export const universalMandatoryForms = {
   "reco_information_guide": {
-    "form_name": "RECO Information Guide", 
+    "form_name": "RECO Information Guide",
     "form_number": "RECO Guide",
     "purpose": "Consumer protection - explains rights, duties, and expectations",
     "when_required": "Before any services or assistance are provided",
@@ -11,7 +11,7 @@ export const universalMandatoryForms = {
   "privacy_policy_disclosure": {
     "form_name": "Privacy Policy Disclosure",
     "form_number": "PIPEDA Compliance Form",
-    "purpose": "Informs clients how personal information is collected, used, and disclosed", 
+    "purpose": "Informs clients how personal information is collected, used, and disclosed",
     "when_required": "Before collecting any personal information",
     "notes": "Must explain data handling practices and obtain consent",
     "compliance": "PIPEDA requirement"
@@ -25,7 +25,7 @@ export const universalMandatoryForms = {
     "compliance": "FINTRAC/PCMLTFA requirement"
   },
   "fintrac_corporate_id": {
-    "form_name": "FINTRAC Corporation/Entity Identification Information Record", 
+    "form_name": "FINTRAC Corporation/Entity Identification Information Record",
     "form_number": "CREA Corporate Template",
     "purpose": "Anti-money laundering compliance for corporate clients",
     "when_required": "For corporate buyers/sellers before offer acceptance",
@@ -49,7 +49,7 @@ export const universalMandatoryForms = {
     "compliance": "RECO/TRESA requirement"
   },
   "self_represented_acknowledgement": {
-    "form_name": "Information and Disclosure to Self-Represented Party", 
+    "form_name": "Information and Disclosure to Self-Represented Party",
     "form_number": "RECO Form",
     "purpose": "Acknowledges party is not represented by the brokerage",
     "when_required": "Before assisting any unrepresented party",
@@ -58,11 +58,35 @@ export const universalMandatoryForms = {
   },
   "cooperation_confirmation": {
     "form_name": "Confirmation of Co-operation and Representation",
-    "form_number": "OREA Form 320", 
+    "form_number": "OREA Form 320",
     "purpose": "Confirms agency relationships in the transaction",
     "when_required": "Before presenting offers or showing properties",
     "notes": "Clarifies who represents whom in the transaction",
     "compliance": "RECO/TRESA requirement"
+  },
+  "multiple_representation_buyer": {
+    "form_name": "Multiple Representation Acknowledgement (Buyer)",
+    "form_number": "OREA Form 325",
+    "purpose": "Acknowledges buyer consents to multiple representation",
+    "when_required": "When brokerage represents both buyer and seller",
+    "notes": "Required under TRESA - must obtain informed written consent before proceeding",
+    "compliance": "TRESA requirement (effective Dec 1, 2023)"
+  },
+  "multiple_representation_seller": {
+    "form_name": "Multiple Representation Acknowledgement (Seller)",
+    "form_number": "OREA Form 326",
+    "purpose": "Acknowledges seller consents to multiple representation",
+    "when_required": "When brokerage represents both buyer and seller",
+    "notes": "Required under TRESA - must obtain informed written consent before proceeding",
+    "compliance": "TRESA requirement (effective Dec 1, 2023)"
+  },
+  "fintrac_unrepresented_verification": {
+    "form_name": "FINTRAC Unrepresented Party Identification",
+    "form_number": "CREA Template",
+    "purpose": "Verify identity of unrepresented party in transaction",
+    "when_required": "When other party in transaction has no real estate representation",
+    "notes": "New requirement effective October 1, 2025 - must verify identity and determine third-party involvement",
+    "compliance": "FINTRAC/PCMLTFA requirement"
   }
 };
 

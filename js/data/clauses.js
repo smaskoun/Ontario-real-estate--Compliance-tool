@@ -63,5 +63,69 @@ export const clauseDatabase = {
         "purpose": "Ensures property zoning permits intended use",
         "when_to_use": "Commercial properties, development projects",
         "risk_without": "Zoning restrictions prevent intended use"
+    },
+    "TITLE-1": {
+        "name": "Condition - Title Search",
+        "category": "Title",
+        "text": "This Offer is conditional upon the Buyer or the Buyer's solicitor obtaining a current title search of the property and being satisfied with the results thereof in the Buyer's sole and absolute discretion. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+        "purpose": "Ensures clear title to property without liens, encumbrances, or defects",
+        "when_to_use": "All property purchases",
+        "risk_without": "Title defects, outstanding liens, encumbrances, easements"
+    },
+    "CHAT-1": {
+        "name": "Chattels and Fixtures",
+        "category": "Inclusions/Exclusions",
+        "text": "The following chattels are included in the purchase price: _________________. The following fixtures are excluded from the purchase price: _________________. Unless otherwise stated in this Agreement, all fixtures and fittings presently on the property shall remain with the property. For the purposes of this Agreement, chattels are personal property that can be removed without damage to the property, and fixtures are items permanently attached to the property.",
+        "purpose": "Clearly defines what personal property stays with the property and what is excluded",
+        "when_to_use": "All residential transactions",
+        "risk_without": "Disputes over appliances, window coverings, light fixtures, and other items"
+    },
+    "STATUS-1": {
+        "name": "Condition - Status Certificate Review (Condominium)",
+        "category": "Condominium",
+        "text": "This Offer is conditional upon the Buyer or the Buyer's solicitor reviewing and approving the Status Certificate for the condominium corporation, including but not limited to: current financial statements, reserve fund study, management agreements, insurance coverage, pending litigation, special assessments, and common expense arrears. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+        "purpose": "Reviews condominium corporation's financial health and legal status",
+        "when_to_use": "All condominium purchases",
+        "risk_without": "Hidden special assessments, inadequate reserve fund, pending litigation"
+    },
+    "UFFI-1": {
+        "name": "Warranty - UFFI (Urea Formaldehyde Foam Insulation)",
+        "category": "Disclosure",
+        "text": "Seller warrants that during the time Seller has owned the property, Seller has not caused any building on the property to be insulated with insulating material containing urea formaldehyde, and that to the best of Seller's knowledge no building on the property contains or has ever contained insulation containing urea formaldehyde. This warranty shall survive and not merge on the completion of this transaction, and if the building is part of a multiple unit building, this warranty shall only apply to that part of the building which is the subject of this transaction.",
+        "purpose": "Discloses presence or absence of UFFI insulation",
+        "when_to_use": "Residential properties built between 1970-1980",
+        "risk_without": "Health concerns, difficulty obtaining financing, resale issues"
+    },
+    "RENTAL-1": {
+        "name": "Rental Items",
+        "category": "Equipment",
+        "text": "The following equipment is rented and not included in the purchase price. The Buyer agrees to assume the rental contract(s), if assumable: _________________. The Seller agrees to provide the Buyer with copies of all rental agreements. Rental items may include but are not limited to: hot water heater/tank, water softener, water purification system, security system, furnace, air conditioner, and other equipment.",
+        "purpose": "Clarifies responsibility for rental equipment and ongoing costs",
+        "when_to_use": "Properties with rental water heaters, HVAC, security systems, etc.",
+        "risk_without": "Unexpected ongoing rental costs, non-assumable contracts"
+    },
+    "SURVEY-1": {
+        "name": "Condition - Survey",
+        "category": "Survey",
+        "text": "This Offer is conditional upon the Buyer obtaining, at the Buyer's expense, a current survey of the property satisfactory to the Buyer in the Buyer's sole and absolute discretion. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. Alternatively, the Seller may provide an existing survey with a declaration that there have been no improvements or alterations to the property since the date of the survey. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+        "purpose": "Confirms property boundaries and identifies encroachments",
+        "when_to_use": "Freehold properties, especially with structures near boundaries",
+        "risk_without": "Boundary disputes, encroachments, easements not disclosed"
+    },
+    "WELL-1": {
+        "name": "Condition - Well Water Test",
+        "category": "Environmental",
+        "text": "This Offer is conditional upon the Buyer obtaining, at the Buyer's expense, a well water test satisfactory to the Buyer in the Buyer's sole and absolute discretion. The test shall include analysis for bacteria, nitrates, and other contaminants as recommended by local health authorities. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+        "purpose": "Ensures well water is safe and potable",
+        "when_to_use": "Rural properties with well water",
+        "risk_without": "Contaminated water, health hazards, costly remediation"
+    },
+    "SEPTIC-1": {
+        "name": "Condition - Septic System Inspection",
+        "category": "Environmental",
+        "text": "This Offer is conditional upon the Buyer obtaining, at the Buyer's expense, a septic system inspection satisfactory to the Buyer in the Buyer's sole and absolute discretion. Unless the Buyer gives notice in writing delivered to the Seller personally or in accordance with any other provisions for the delivery of notice in this Agreement of Purchase and Sale or any Schedule thereto not later than _______ p.m. on the ______ day of ________________, 20____, that this condition is fulfilled, this Offer shall be null and void and the deposit shall be returned to the Buyer in full without deduction. This condition is included for the benefit of the Buyer and may be waived at the Buyer's sole option by notice in writing to the Seller as aforesaid within the time period stated herein.",
+        "purpose": "Verifies septic system is functioning properly",
+        "when_to_use": "Rural properties with septic systems",
+        "risk_without": "Septic system failure, costly replacement or repairs"
     }
 };
