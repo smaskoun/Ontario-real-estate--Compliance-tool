@@ -139,5 +139,30 @@ export const transactionSpecificForms = {
       "OREA Form 503 - Sale of Business Statement",
       "OREA Form 504 - Schedule (Business Purchase)"
     ]
+  },
+  "residential_rental": {
+    "primary": "Ontario Standard Lease (Form 2229E) - MANDATORY for residential tenancies",
+    "additional": [
+      "OREA Form 400 - Agreement to Lease (Residential)",
+      "OREA Form 401 - Schedule/Rental Application (Residential)",
+      "OREA Form 402 - Mutual Release - Agreement to Lease (Residential)",
+      "OREA Form 372 - Tenant Designated Representation Agreement"
+    ],
+    "notes": "Ontario Standard Lease is mandatory for most residential tenancies since April 30, 2018. OREA forms are used by agents but do NOT replace the mandatory government lease."
+  },
+  "commercial_rental": {
+    "primary": "OREA Form 510 - Agreement to Lease (Commercial - Long Form) OR OREA Form 511 - Agreement to Lease (Commercial - Short Form)",
+    "additional": [
+      "OREA Form 512 - Schedule - Agreement to Lease (Commercial)",
+      "OREA Form 372 - Tenant Designated Representation Agreement"
+    ]
+  },
+  "business_rental": {
+    "primary": "OREA Form 511 - Agreement to Lease (Commercial - Short Form)",
+    "additional": [
+      "OREA Form 512 - Schedule - Agreement to Lease (Commercial)",
+      "OREA Form 502 - Agreement of Purchase and Sale (Business in Leased Premises)",
+      "OREA Form 503 - Sale of Business Statement"
+    ]
   }
 };
