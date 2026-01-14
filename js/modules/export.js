@@ -1,7 +1,15 @@
+/**
+ * Export and clipboard utilities for transaction data
+ * @module js/modules/export
+ */
 
 import { showCopyToast } from './ui.js';
 
-// Fallback Copy Function
+/**
+ * Fallback copy function for browsers without Clipboard API
+ * @param {string} text - Text to copy to clipboard
+ * @private
+ */
 function fallbackCopyToClipboard(text) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -23,7 +31,12 @@ function fallbackCopyToClipboard(text) {
     document.body.removeChild(textArea);
 }
 
-// Copy to clipboard helper
+/**
+ * Copies text to clipboard using modern API with fallback
+ * @param {string} text - Text to copy
+ * @param {string} successMessage - Message to show on successful copy
+ * @private
+ */
 function copyTextToClipboard(text, successMessage) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
@@ -36,6 +49,11 @@ function copyTextToClipboard(text, successMessage) {
     }
 }
 
+/**
+ * Copies a specific clause text to clipboard
+ * @param {string} clauseId - The ID of the clause to copy
+ * @public
+ */
 export function copyClauseText(clauseId) {
     const textarea = document.getElementById(`clause-text-${clauseId}`);
     if (textarea) {
@@ -53,6 +71,10 @@ export function copyClauseText(clauseId) {
     }
 }
 
+/**
+ * Copies all clause texts to clipboard as a formatted package
+ * @public
+ */
 export function copyAllClauses() {
     const allClauses = [];
     document.querySelectorAll('.clause-item__text').forEach((textarea, index) => {
@@ -67,6 +89,10 @@ export function copyAllClauses() {
     copyTextToClipboard(allText, 'All clauses copied to clipboard!');
 }
 
+/**
+ * Generates and copies a complete transaction summary with all forms, clauses, and compliance items
+ * @public
+ */
 export function generateCompleteTransactionSummary() {
     const currentDate = new Date().toLocaleDateString('en-CA');
 
@@ -83,7 +109,7 @@ export function generateCompleteTransactionSummary() {
         mandatoryForms.push(form.textContent.trim());
     });
 
-    // Get property-specific forms  
+    // Get property-specific forms
     const propertyForms = [];
     document.querySelectorAll('.form-list-item').forEach(form => {
         propertyForms.push(form.textContent.trim());
@@ -115,7 +141,7 @@ export function generateCompleteTransactionSummary() {
 └─────────────────────────────────────────────────────────────┘
 
 Property Type: ${propertyType.replace(/_/g, ' ').toUpperCase()}
-Client Type: ${clientType.replace(/_/g, ' ').toUpperCase()}  
+Client Type: ${clientType.replace(/_/g, ' ').toUpperCase()}
 Transaction Type: ${transactionType.toUpperCase()}
 Representation: ${representationStatus.replace(/_/g, ' ').toUpperCase()}
 Financing: ${financingType.replace(/_/g, ' ').toUpperCase()}
@@ -158,14 +184,14 @@ ${complianceItems.length > 0 ? complianceItems.map((item, index) => `${index + 1
 │                      IMPORTANT NOTES                        │
 └─────────────────────────────────────────────────────────────┘
 
-⚠️  This summary provides guidance based on current Ontario real estate 
-    regulations. Always verify requirements with RECO and consult legal 
+⚠️  This summary provides guidance based on current Ontario real estate
+    regulations. Always verify requirements with RECO and consult legal
     counsel for complex transactions.
 
-⚠️  All condition dates and terms must be filled in appropriately for 
+⚠️  All condition dates and terms must be filled in appropriately for
     your specific transaction.
 
-⚠️  Ensure all parties sign required forms before proceeding with 
+⚠️  Ensure all parties sign required forms before proceeding with
     transaction.
 
 ═══════════════════════════════════════════════════════════════
@@ -177,6 +203,10 @@ Professional Edition - Full Compliance
     copyTextToClipboard(summary, 'Complete Transaction Summary copied to clipboard!');
 }
 
+/**
+ * Exports a list of all required forms to clipboard
+ * @public
+ */
 export function exportFormList() {
     const formsList = [];
 

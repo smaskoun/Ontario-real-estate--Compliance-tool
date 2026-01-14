@@ -1,10 +1,32 @@
 {
   "name": "ontario-real-estate-compliance-tool",
   "version": "1.0.0",
-  "description": "Ontario real estate compliance dashboard",
+  "description": "Ontario real estate compliance dashboard for RECO, FINTRAC, and PIPEDA requirements",
   "private": true,
   "type": "module",
+  "keywords": [
+    "ontario",
+    "real-estate",
+    "compliance",
+    "RECO",
+    "FINTRAC",
+    "PIPEDA",
+    "TRESA"
+  ],
+  "author": "",
+  "license": "MIT",
   "scripts": {
-    "test": "node tests/run-tests.js"
+    "test": "node tests/run-tests.js",
+    "dev": "live-server --port=8080 --open=/ --watch=.",
+    "lint": "eslint js/**/*.js src/**/*.js tests/**/*.js",
+    "lint:fix": "eslint js/**/*.js src/**/*.js tests/**/*.js --fix",
+    "format": "prettier --write \"**/*.{js,json,css,html,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,css,html,md}\"",
+    "serve": "python -m http.server 8080"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "live-server": "^1.2.2"
   }
 }

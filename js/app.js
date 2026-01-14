@@ -77,7 +77,7 @@ function initializeData() {
         // Let's stick to step 1 restoration for users to review their inputs.
 
         // Regenerate results since we have state (if valid)
-        // generateTransactionResults(); 
+        // generateTransactionResults();
 
         // Note: In wizard mode, we don't show results immediately until they click "Generate".
     }
@@ -143,7 +143,7 @@ function setupEventListeners() {
                 updateWizardUI(currentStep);
             }
             // Allow going forward only if current step is valid and target is +1 (sequential)
-            // Or if we have full state (revisiting)? 
+            // Or if we have full state (revisiting)?
             // For now enforce sequential validation for forward.
             else if (targetStep === currentStep + 1 && validateStep(currentStep)) {
                 currentStep = targetStep;
@@ -207,6 +207,33 @@ function setupEventListeners() {
             }
         }
     });
+
+    // Transaction Type Toggle (Purchase vs Rental)
+    const transactionTypeInputs = document.querySelectorAll('input[name="transaction_type"]');
+    transactionTypeInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+            const selectedType = e.target.value;
+            togglePropertyTypeOptions(selectedType);
+        });
+    });
+}
+
+function togglePropertyTypeOptions(transactionType) {
+    const allPropertyOptions = document.querySelectorAll('.property-option');
+
+    allPropertyOptions.forEach(option => {
+        const optionTransactionType = option.dataset.transactionType;
+        const radioInput = option.querySelector('input[type="radio"]');
+
+        if (optionTransactionType === transactionType) {
+            option.classList.remove('hidden');
+            radioInput.removeAttribute('disabled');
+        } else {
+            option.classList.add('hidden');
+            radioInput.setAttribute('disabled', 'disabled');
+            radioInput.checked = false; // Uncheck hidden options
+        }
+    });
 }
 
 function handleFormSubmission(formData) {
@@ -225,28 +252,8 @@ function handleFormSubmission(formData) {
 function updateStateFromFormData(formData) {
     currentTransaction.propertyType = formData.get('property_type');
     currentTransaction.clientType = formData.get('client_type');
-    // Map missing radio values if unchecked (formData.get returns null)
-    // Actually standard behavior is fine.
-
-    currentTransaction.transactionType = 'sale'; // Default or implicit?
+    currentTransaction.transactionType = formData.get('transaction_type') || 'purchase'; // Get from form, default to purchase
     currentTransaction.representationStatus = formData.get('representation_status');
-    currentTransaction.financingType = formData.get('financing_type'); // We removed this inputs? 
-    // Wait, step 2 had "Fund Handling", but not "Financing Type"?
-    // In original code, financing_type was used for mortgage clauses.
-    // I need to check if I included Financing Type in Step 2 or 3?
-    // In my rewritten index.html, I included "Needs Financing" checkbox in transaction_details.
-    // But specific "Financing Type" (Conventional/Alternative) radio was in the original form logic but maybe I missed it in HTML rewrite?
-    // Let's check index.html content I wrote.
-
-    // In index.html step 2: Representation, Fund Handling.
-    // In index.html step 3: "Needs Financing" checkbox.
-    // The original app.js had financing_type input.
-    // If I missed it, I should infer it or add it back.
-
-    // Logic: if needs_financing checkbox is checked -> assume conventional?
-    // Or add the financing inputs back.
-    // Given "Redesign", simplifying is good.
-    // I will map "needs_financing" checkbox to `financingType = 'conventional_mortgage'`?
 
     const details = formData.getAll('transaction_details');
     if (details.includes('needs_financing')) {
@@ -257,7 +264,6 @@ function updateStateFromFormData(formData) {
 
     currentTransaction.geographicScope = details.includes('out_of_province') ? 'national' : 'local';
     currentTransaction.timingUrgency = details.includes('expedited') ? 'urgent' : 'standard';
-    // details is array of strings
 }
 
 function generateTransactionResults() {
