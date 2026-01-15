@@ -200,6 +200,25 @@ function isMandatoryClause(clauseId, clause, transaction) {
     if (clauseId === 'INSUR-1') {
         return true;
     }
+
+    // Rental-specific mandatory clauses
+    const isRentalTransaction = transaction.transactionType === 'rental' ||
+                                ['residential_rental', 'commercial_rental', 'business_rental'].includes(transaction.propertyType);
+
+    if (isRentalTransaction) {
+        // Fixed-term lease clause is mandatory for all rentals
+        if (clauseId === 'LEASE-1') return true;
+
+        // Landlord obligations mandatory for residential rentals
+        if (clauseId === 'LEASE-7' && transaction.propertyType === 'residential_rental') return true;
+
+        // Landlord access rights mandatory for all rentals
+        if (clauseId === 'LEASE-8') return true;
+
+        // Security deposit clause mandatory for residential rentals
+        if (clauseId === 'LEASE-10' && transaction.propertyType === 'residential_rental') return true;
+    }
+
     return false;
 }
 
@@ -212,6 +231,37 @@ function isRecommendedClause(clauseId, clause, transaction) {
     if (clauseId === 'LAW-1' && transaction.transactionComplexity === 'complex') {
         return true;
     }
+
+    // Rental-specific recommended clauses
+    const isRentalTransaction = transaction.transactionType === 'rental' ||
+                                ['residential_rental', 'commercial_rental', 'business_rental'].includes(transaction.propertyType);
+
+    if (isRentalTransaction) {
+        // Rent escalation recommended for all rentals
+        if (clauseId === 'LEASE-2') return true;
+
+        // Renewal option recommended for all rentals
+        if (clauseId === 'LEASE-3') return true;
+
+        // Subletting clause recommended for all rentals
+        if (clauseId === 'LEASE-4') return true;
+
+        // Permitted use recommended for commercial rentals
+        if (clauseId === 'LEASE-5' && ['commercial_rental', 'business_rental'].includes(transaction.propertyType)) return true;
+
+        // Tenant maintenance obligations recommended for all rentals
+        if (clauseId === 'LEASE-6') return true;
+
+        // Tenant insurance recommended for all rentals
+        if (clauseId === 'LEASE-9') return true;
+
+        // Triple net lease recommended for commercial rentals
+        if (clauseId === 'LEASE-13' && ['commercial_rental', 'business_rental'].includes(transaction.propertyType)) return true;
+
+        // CAM charges recommended for commercial rentals
+        if (clauseId === 'LEASE-14' && ['commercial_rental', 'business_rental'].includes(transaction.propertyType)) return true;
+    }
+
     return false;
 }
 
@@ -228,6 +278,22 @@ function isConditionalClause(clauseId, clause, transaction) {
     if (clauseId === 'ZONING-1' && ['commercial', 'vacant_land'].includes(transaction.propertyType)) {
         return true;
     }
+
+    // Rental-specific conditional clauses
+    const isRentalTransaction = transaction.transactionType === 'rental' ||
+                                ['residential_rental', 'commercial_rental', 'business_rental'].includes(transaction.propertyType);
+
+    if (isRentalTransaction) {
+        // Early termination clause - conditional based on lease type
+        if (clauseId === 'LEASE-11') return true;
+
+        // Tenant improvements - conditional for commercial rentals
+        if (clauseId === 'LEASE-12' && ['commercial_rental', 'business_rental'].includes(transaction.propertyType)) return true;
+
+        // Tenant improvement allowance - conditional for commercial rentals
+        if (clauseId === 'LEASE-15' && ['commercial_rental', 'business_rental'].includes(transaction.propertyType)) return true;
+    }
+
     return false;
 }
 
