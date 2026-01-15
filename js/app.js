@@ -254,6 +254,7 @@ function updateStateFromFormData(formData) {
     currentTransaction.clientType = formData.get('client_type');
     currentTransaction.transactionType = formData.get('transaction_type') || 'purchase'; // Get from form, default to purchase
     currentTransaction.representationStatus = formData.get('representation_status');
+    currentTransaction.fundHandling = formData.get('fund_handling'); // Capture fund handling
 
     const details = formData.getAll('transaction_details');
     if (details.includes('needs_financing')) {
@@ -267,11 +268,11 @@ function updateStateFromFormData(formData) {
 }
 
 function generateTransactionResults() {
+    // Update universal forms based on transaction details
+    displayUniversalMandatoryForms(currentTransaction);
+
     generatePropertySpecificForms(currentTransaction.propertyType);
     generateClauseRecommendations(currentTransaction);
-    // Note: clause logic uses transaction.financingType.
-    // My mapping above handles it.
-
     generateComplianceChecklist();
 }
 

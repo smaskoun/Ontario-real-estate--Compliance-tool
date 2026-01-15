@@ -42,13 +42,29 @@ export function showCopyToast(message = 'Copied to clipboard!') {
 
 // --- Form & Results Rendering ---
 
-export function displayUniversalMandatoryForms() {
+export function displayUniversalMandatoryForms(transaction = null) {
     const container = document.getElementById('universal-forms-list');
     if (!container) return;
 
     container.innerHTML = '';
 
     Object.entries(universalMandatoryForms).forEach(([formId, form]) => {
+        // Filter forms based on transaction details
+        if (transaction) {
+            // Skip individual FINTRAC if client is corporate
+            if (formId === 'fintrac_individual_id' && transaction.clientType === 'corporate') {
+                return;
+            }
+            // Skip corporate FINTRAC if client is individual or mixed
+            if (formId === 'fintrac_corporate_id' && transaction.clientType !== 'corporate') {
+                return;
+            }
+            // Skip receipt of funds if no funds are handled
+            if (formId === 'receipt_of_funds' && transaction.fundHandling === 'no_funds') {
+                return;
+            }
+        }
+
         const formItem = createUniversalFormItem(form);
         container.appendChild(formItem);
     });
