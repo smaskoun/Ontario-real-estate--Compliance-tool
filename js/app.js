@@ -222,10 +222,12 @@ function togglePropertyTypeOptions(transactionType) {
     const allPropertyOptions = document.querySelectorAll('.property-option');
 
     allPropertyOptions.forEach(option => {
-        const optionTransactionType = option.dataset.transactionType;
+        // Split comma-separated transaction types and trim whitespace
+        const optionTransactionTypes = option.dataset.transactionType.split(',').map(t => t.trim());
         const radioInput = option.querySelector('input[type="radio"]');
 
-        if (optionTransactionType === transactionType) {
+        // Check if current transaction type is in the list
+        if (optionTransactionTypes.includes(transactionType)) {
             option.classList.remove('hidden');
             radioInput.removeAttribute('disabled');
         } else {
@@ -234,6 +236,12 @@ function togglePropertyTypeOptions(transactionType) {
             radioInput.checked = false; // Uncheck hidden options
         }
     });
+
+    // Smooth scroll to property type section
+    const propertyTypeSection = document.getElementById('property-type-options');
+    if (propertyTypeSection) {
+        propertyTypeSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 function handleFormSubmission(formData) {
