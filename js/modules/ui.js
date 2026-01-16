@@ -51,6 +51,11 @@ export function displayUniversalMandatoryForms(transaction = null) {
     Object.entries(universalMandatoryForms).forEach(([formId, form]) => {
         // Filter forms based on transaction details
         if (transaction) {
+            // Skip if form has transaction_types restriction and current type not included
+            if (form.transaction_types && !form.transaction_types.includes(transaction.transactionType)) {
+                return;
+            }
+
             // Skip individual FINTRAC if client is corporate
             if (formId === 'fintrac_individual_id' && transaction.clientType === 'corporate') {
                 return;

@@ -40,13 +40,23 @@ export const universalMandatoryForms = {
     "notes": "Required for trust account compliance and FINTRAC",
     "compliance": "FINTRAC/PCMLTFA requirement"
   },
-  "representation_agreement": {
-    "form_name": "Buyer/Seller Representation Agreement",
-    "form_number": "OREA Form 300 (BRA) / Form 200 (Listing)",
-    "purpose": "Establishes client relationship and service terms",
-    "when_required": "Before providing services to buyers/sellers",
+  "buyer_representation_agreement": {
+    "form_name": "Buyer Representation Agreement",
+    "form_number": "OREA Form 300 (BRA)",
+    "purpose": "Establishes client relationship and service terms for buyers",
+    "when_required": "Before providing services to buyers",
     "notes": "Defines duties, commission, and representation type",
-    "compliance": "RECO/TRESA requirement"
+    "compliance": "RECO/TRESA requirement",
+    "transaction_types": ["purchase"]
+  },
+  "seller_representation_agreement": {
+    "form_name": "Seller Representation Agreement (Listing Agreement)",
+    "form_number": "OREA Form 200 (Listing)",
+    "purpose": "Establishes client relationship and service terms for sellers",
+    "when_required": "Before providing services to sellers",
+    "notes": "Defines duties, commission, marketing authorization, and holdover period. 2025 version includes updated commission clause.",
+    "compliance": "RECO/TRESA requirement",
+    "transaction_types": ["selling"]
   },
   "self_represented_acknowledgement": {
     "form_name": "Information and Disclosure to Self-Represented Party",
