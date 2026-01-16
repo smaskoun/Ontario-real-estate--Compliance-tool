@@ -413,30 +413,28 @@
                     </button>
                 </div>
 
-                 <!-- Universal Forms (Moved here) -->
-                 <div class="card warning-card">
-                    <div class="card__header">
-                        <div class="warning-header">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
-                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                                <path d="M12 9v4"/>
-                                <path d="m12 17 .01 0"/>
-                            </svg>
-                            <h2>MANDATORY FORMS (ALL TRANSACTIONS)</h2>
-                        </div>
-                    </div>
-                    <div class="card__body">
-                        <div id="universal-forms-list" class="universal-forms-list"></div>
-                    </div>
-                </div>
 
-                <!-- Specific Forms -->
-                <div class="card">
+                 <!-- Combined Forms Section -->
+                 <div class="card">
                     <div class="card__header">
-                        <h2>Property-Specific Forms</h2>
+                        <h2>Required Forms</h2>
                     </div>
                     <div class="card__body">
-                        <div id="property-forms-list" class="property-forms-list"></div>
+                        <!-- Universal Mandatory Forms -->
+                        <div style="margin-bottom: var(--space-32);">
+                            <h3 style="font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--primary); margin-bottom: var(--space-20); padding-bottom: var(--space-12); border-bottom: 2px solid var(--primary);">
+                                Mandatory Forms (All Transactions)
+                            </h3>
+                            <div id="universal-forms-list" class="universal-forms-list"></div>
+                        </div>
+
+                        <!-- Property-Specific Forms -->
+                        <div>
+                            <h3 style="font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--primary); margin-bottom: var(--space-20); padding-bottom: var(--space-12); border-bottom: 2px solid var(--primary);">
+                                Property-Specific Forms
+                            </h3>
+                            <div id="property-forms-list" class="property-forms-list"></div>
+                        </div>
                     </div>
                 </div>
 
